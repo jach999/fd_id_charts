@@ -47,6 +47,7 @@ taxon_level_options = {
     "Class": "Class level",
     "Order": "Order level",
     "Suborder": "Suborder level",
+    "Superfamily": "Superfamily level",
     "Family": "Family level",
     "Subfamily": "Subfamily level",
     "Genus": "Genus level"

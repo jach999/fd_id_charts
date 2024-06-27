@@ -67,6 +67,14 @@ def is_valid_mainVariable(mainVariable):
 def is_valid_subVariable(mainVariable, subVariable):
     return subVariable in mainVariable_options.get(mainVariable, {})
 
+# Validate device_type
+def is_valid_device_type(device_type):
+    return device_type in device_type_options
+
+# Validate taxon_level
+def is_valid_taxon_level(taxon_level):
+    return taxon_level in taxon_level_options
+
 # Validate extra_filter
 def is_valid_extra_filter(extra_filter):
     return extra_filter in extra_filter_options or extra_filter is None
@@ -118,18 +126,29 @@ if is_valid_subVariable(mainVariable, subVariable):
 else:
     print("Invalid subVariable. Please choose a valid option.")
 
+if is_valid_device_type(device_type):
+    print(f"Selected device type: {device_type}")
+else:
+    print("Invalid device type. Please choose a valid option.")
+
+if is_valid_taxon_level(taxon_level):
+    print(f"Selected taxon level: {taxon_level}")
+else:
+    print("Invalid taxon level. Please choose a valid option.")
+
+    print((f"Selected taxon: {taxon}"))
 
 if is_valid_extra_filter(extra_filter):
-    print(f"Selected extra_filter: {extra_filter}")
+    print(f"Selected extra filter: {extra_filter}")
 else:
-    print("Invalid extra_filter. Please choose a valid option.")
+    print("Invalid extra filter. Please choose a valid option.")
 
 if is_valid_extra_subfilter(extra_filter, extra_subfilter):
     if extra_filter == None:
-        print("Selected extra_subfilter: None")
+        print("Selected extra subfilter: None")
     else:
-        print(f"Selected extra_subfilter: {extra_subfilter}")
+        print(f"Selected extra subfilter: {extra_subfilter}")
 else:
-    print("Invalid extra_subfilter. Please choose a valid option.")
+    print("Invalid extra subfilter. Please choose a valid option.")
 
 

@@ -24,7 +24,8 @@ if len(taxon) > 1:
 else:
     taxon_chart_title = taxon[0]
 
-subfilter_name = extra_subfilter.replace(" ", "_")
+if extra_subfilter != None:
+    subfilter_name = extra_subfilter.replace(" ", "_")
 
 if clima == True:
     # Define the folder name where the .csv tables are saved
@@ -68,8 +69,6 @@ clim_data.fillna(0, inplace=True)
 
 # Create the new column "CheckinDate" with combined date and time
 insect_data = insect_data.sort_values(by="DateTime")
-# Drop duplicated IDs
-insect_data = insect_data.drop_duplicates(subset=["ID"])
 
 # Filter by time window (timespan)
 if timespan == True:
@@ -139,19 +138,20 @@ for var in unique_main_variables:
 
 
 if result_tables == True:
-    insect_data.to_csv("results/" + result_name + '/insect_data.csv', index=False)
-    clim_data.to_csv("results/" + result_name + '/clim_data.csv', index=False)
+    #insect_data.to_csv("results/" + result_name + '/insect_data.csv', index=False)
+    #clim_data.to_csv("results/" + result_name + '/clim_data.csv', index=False)
     # Save the date and filter_factor group table to a CSV file
-    dfg_filter_factor.to_csv("results/" + result_name + '/filter_factor_group_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
+    dfg_filter_factor.to_csv("results/" + result_name + "/" + result_name + '_filter_factors_group_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
     # Save the filter_factor pivot table to a CSV file
-    dfp_filter_factor.to_csv("results/" + result_name + '/filter_factor_pivot_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
+    #dfp_filter_factor.to_csv("results/" + result_name + "/" + result_name +  '_filter_factor_count_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
     # Save merged_data to a CSV file (adjust the file path as needed)
-    insect_data_filtered.to_csv("results/" + result_name + '/insect_data_filtered.csv', index=False)
+    #insect_data_filtered.to_csv("results/" + result_name +  "/" + result_name + '_insect_data_filtered.csv', index=False)
     # Save the date and cimatic group table to a CSV file
-    dfg_clim.to_csv("results/" + result_name + '/dfg_clim_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
+    #dfg_clim.to_csv("results/" + result_name + "/" + result_name +  '_dfg_clim_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
     # Save the merged table to a CSV file
-    merged_df.to_csv("results/" + result_name + '/merged_df_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
-    ax1_merged_df.to_csv("results/" + result_name + '/x_merged_df_table.csv', index=True)
+    merged_df.to_csv("results/" + result_name + "/" + result_name +  '_result_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
+    # Save the ax1_merged table to a CSV file
+    #ax1_merged_df.to_csv("results/" + result_name + "/" + result_name +  '_ax1_merged_df_table.csv', index=True)
     
 
 if create_chart == True:
@@ -190,9 +190,9 @@ if create_chart == True:
         figwidth = data_points/5
         fontsize = (720/data_points)
 
-    print("Data points:" + str(data_points))
-    print("Figure widht: " + str(figwidth))
-    print("Font size: " + str(fontsize))
+    #print("Data points:" + str(data_points))
+    #print("Figure widht: " + str(figwidth))
+    #print("Font size: " + str(fontsize))
 
     # Set the interval for the x-axis based on time_freq
     if hours >= 24:
