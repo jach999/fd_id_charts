@@ -13,14 +13,14 @@ timespan = True # True to activate time_start and time_end, or False for coverin
 mainVariable = "Ambient" # "Device_type", "Device", "Ambient", "Site"
 subVariable = All #  Set to All to show all. In "Device_type": FAIR-D or "ID"; in "Device": FAIR-D1 -D2, -D3, or -D4, ID1, ID2, ID4; in "AmbienT": "Maize Field" or "Meadow"; in "Site": "Site 1", "Site 2", "Site 3", "Site 4" 
 device_type = All # Set to All to show all devices, or choose between "FAIR-D" or "ID"
-taxon_level = "Superfamily" # "Class", "Order", "Suborder", "Family", "Subfamily", "Genus"
-taxon = "Syrphoidea" # Acording the selected taxon_level, the desired taxon. If more than one is wanted:["taxon1","taxon2", ...] - Example for taxon_level = "Order": ["Diptera", "Coleoptera", "Hymenoptera"] 
+taxon_level = "Class" # "Class", "Order", "Suborder", "Family", "Subfamily", "Genus"
+taxon = "Insecta" # Acording the selected taxon_level, the desired taxon. If more than one is wanted:["taxon1","taxon2", ...] - Example for taxon_level = "Order": ["Diptera", "Coleoptera", "Hymenoptera"] 
 
 #---------------------#
 
 # Additional filter
 extra_filter = None # None for not adding an additional filter. Same settings as in "mainVariable"
-extra_subfilter = None # Same settings as in "subvariable". If extra_filter = None, extra_subfilter does nothing.
+extra_subfilter = "Site 4" # Same settings as in "subvariable". If extra_filter = None, extra_subfilter does nothing.
 
 #---------------------#
 
@@ -41,14 +41,15 @@ result_tables = True # Saves the interim result tables in the result/ folder
 create_chart = True # Activates the save_chart and display_chart options
 save_chart = True # Save chart .png file in the result/ folder
 display_chart = False # Display the generated chart in a new window
-#sufix = None # Add an extra sufix to the results data folder and chart name. None to deactivate
+folder_sufix = None # Add an extra folder sufix to the results data folder and chart name. None to deactivate
+#file_sufix = None # Add an extra file sufix to the results data folder and chart name. None to deactivate
 #plot_title = True # Plot automatic generated plot title
 
 #---------------------#
 
-# Quick options for generating Part 1 and Part 2 charts. Please before using this outcomment time_start, time_end, sufix, and plot_title from the upper configurations
-#time_start, time_end, sufix, plot_title = ["2023-08-23 6:00",  "2023-09-01 19:00", "Part_1", True] 
-time_start, time_end, sufix, plot_title = ["2023-09-02 6:00", "2023-09-13 19:00", "Part_2", False]
+# Quick options for generating Part 1 and Part 2 charts. Please before using this outcomment time_start, time_end, file_sufix, and plot_title from the upper configurations
+time_start, time_end, file_sufix, plot_title = ["2023-08-23 6:00",  "2023-09-01 19:00", "Part_1", True] 
+#time_start, time_end, file_sufix, plot_title = ["2023-09-02 6:00", "2023-09-13 19:00", "Part_2", False]
 
 #---------------------#
 

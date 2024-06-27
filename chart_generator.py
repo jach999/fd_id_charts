@@ -9,10 +9,16 @@ from src.dictionaries_control import *
 # Load data
 HOME = os.path.dirname(__file__)
 
-if sufix != None:
-    sufix = ("_" + sufix)
+if folder_sufix != None:
+    folder_sufix = ("_" + folder_sufix)
 else:
-    sufix = ""
+    folder_sufix = ""
+
+
+if file_sufix != None:
+    file_sufix = ("_" + file_sufix)
+else:
+    file_sufix = ""
 
 hours = int(time_freq.split()[0])  # Extract the numeric value from time_freq
 
@@ -30,25 +36,29 @@ if extra_subfilter != None:
 if clima == True:
     # Define the folder name where the .csv tables are saved
     if extra_filter != None:
-        result_name = f"{'_'.join(taxon)}_{mainVariable}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{subfilter_name}_Clima_{hours}H{sufix}" 
+        folder_result_name = f"{'_'.join(taxon)}_{mainVariable}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{subfilter_name}_Clima_{hours}H{folder_sufix}" 
+        file_result_name = f"{'_'.join(taxon)}_{mainVariable}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{subfilter_name}_Clima_{hours}H{file_sufix}"
         plt_title = (taxon_chart_title + " " + taxon_level + " count by " + mainVariable.replace("_", " ") + " (" + subVariable + ")" + " and by " +  extra_filter + " (" + extra_subfilter + ")" + " with Climatic Conditions")
     else:
-        result_name = f"{'_'.join(taxon)}_{mainVariable}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_Clima_{hours}H{sufix}"
+        folder_result_name = f"{'_'.join(taxon)}_{mainVariable}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_Clima_{hours}H{folder_sufix}"
+        file_result_name = f"{'_'.join(taxon)}_{mainVariable}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_Clima_{hours}H{file_sufix}"
         plt_title = (taxon_chart_title + " " + taxon_level + " count by " +  mainVariable.replace("_", " ")  + " (" + subVariable + ")" + " with Climatic Conditions")
 else:
     if extra_filter != None:
-       result_name = f"{'_'.join(taxon)}_{mainVariable}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{subfilter_name}_{hours}H{sufix}" 
+       folder_result_name = f"{'_'.join(taxon)}_{mainVariable}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{subfilter_name}_{hours}H{folder_sufix}" 
+       file_result_name = f"{'_'.join(taxon)}_{mainVariable}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{subfilter_name}_{hours}H{file_sufix}"
        plt_title = (taxon_chart_title + " " + taxon_level + " count by " +  mainVariable.replace("_", " ")  + " (" + subVariable + ")" + " and by " +  extra_filter + " (" + extra_subfilter + ")") 
     else:        
        # Define the folder name where the .csv tables are saved (without "_Clim")
-       result_name = f"{'_'.join(taxon)}_{mainVariable}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{hours}H{sufix}"
+       folder_result_name = f"{'_'.join(taxon)}_{mainVariable}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{hours}H{folder_sufix}"
+       file_result_name = f"{'_'.join(taxon)}_{mainVariable}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{hours}H{file_sufix}"
        plt_title = (taxon_chart_title + " " + taxon_level + " count by " +  mainVariable.replace("_", " ")  + " (" + subVariable + ")")
 
 # Create the folder if it doesn't exist
-if not os.path.exists("results/" + result_name):
-    os.makedirs("results/" + result_name, 0o777)
+if not os.path.exists("results/" + folder_result_name):
+    os.makedirs("results/" + folder_result_name, 0o777)
 
-print("Data saved in: /results/"+ result_name)
+print("Data saved in: /results/"+ folder_result_name)
 
 insect_data = pd.read_excel("source_tables/id_faird.xlsx", sheet_name="Results", header=0, decimal=",")
 clim_data = pd.read_excel("source_tables/clim_data.xlsx", sheet_name="ClimData", header=0, decimal=",")
@@ -138,20 +148,20 @@ for var in unique_main_variables:
 
 
 if result_tables == True:
-    #insect_data.to_csv("results/" + result_name + '/insect_data.csv', index=False)
-    #clim_data.to_csv("results/" + result_name + '/clim_data.csv', index=False)
+    #insect_data.to_csv("results/" + folder_result_name + '/insect_data.csv', index=False)
+    #clim_data.to_csv("results/" + folder_result_name + '/clim_data.csv', index=False)
     # Save the date and filter_factor group table to a CSV file
-    dfg_filter_factor.to_csv("results/" + result_name + "/" + result_name + '_filter_factors_group_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
+    dfg_filter_factor.to_csv("results/" + folder_result_name + "/" + file_result_name + '_filter_factors_group_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
     # Save the filter_factor pivot table to a CSV file
-    #dfp_filter_factor.to_csv("results/" + result_name + "/" + result_name +  '_filter_factor_count_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
+    #dfp_filter_factor.to_csv("results/" + folder_result_name + "/" + folder_result_name +  '_filter_factor_count_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
     # Save merged_data to a CSV file (adjust the file path as needed)
-    #insect_data_filtered.to_csv("results/" + result_name +  "/" + result_name + '_insect_data_filtered.csv', index=False)
+    #insect_data_filtered.to_csv("results/" + folder_result_name +  "/" + folder_result_name + '_insect_data_filtered.csv', index=False)
     # Save the date and cimatic group table to a CSV file
-    #dfg_clim.to_csv("results/" + result_name + "/" + result_name +  '_dfg_clim_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
+    #dfg_clim.to_csv("results/" + folder_result_name + "/" + folder_result_name +  '_dfg_clim_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
     # Save the merged table to a CSV file
-    merged_df.to_csv("results/" + result_name + "/" + result_name +  '_result_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
+    merged_df.to_csv("results/" + folder_result_name + "/" + file_result_name +  '_result_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
     # Save the ax1_merged table to a CSV file
-    #ax1_merged_df.to_csv("results/" + result_name + "/" + result_name +  '_ax1_merged_df_table.csv', index=True)
+    #ax1_merged_df.to_csv("results/" + folder_result_name + "/" + folder_result_name +  '_ax1_merged_df_table.csv', index=True)
     
 
 if create_chart == True:
@@ -313,6 +323,6 @@ if create_chart == True:
 
     #plt.tight_layout()
     if save_chart == True:
-        plt.savefig("results/" + result_name + "/" + result_name + ".png", bbox_inches="tight")
+        plt.savefig("results/" + folder_result_name + "/" + file_result_name + ".png", bbox_inches="tight")
     if display_chart == True:
         plt.show()
