@@ -3,14 +3,14 @@ All = "All"
 #---------------------#
 
 # Time
-time_freq = "2 H" # The values ​​should be multiples or divisors of 24 plus a "H". Example: "12 H"
+time_freq = "24 H" # The values ​​should be multiples or divisors of 24 plus a "H". Example: "12 H"
 timespan = True # True to activate time_start and time_end, or False for covering the entire experiment time
 #time_start, time_end = ["2023-08-23 7:00",  "2023-09-01 19:00"] # Format: "YYYY-MM-DD HH:mm"
 
 #---------------------#
 
 # Modify these factors to display different info in the charts
-mainVariable = "Ambient" # "Device_type", "Device", "Ambient", "Site"
+mainVariable = "Device_type" # "Device_type", "Device", "Ambient", "Site"
 subVariable = All #  Set to All to show all. In "Device_type": FAIR-D or "ID"; in "Device": FAIR-D1 -D2, -D3, or -D4, ID1, ID2, ID4; in "AmbienT": "Maize Field" or "Meadow"; in "Site": "Site 1", "Site 2", "Site 3", "Site 4" 
 device_type = All # Set to All to show all devices, or choose between "FAIR-D" or "ID"
 taxon_level = "Class" # "Class", "Order", "Suborder", "Family", "Subfamily", "Genus"
@@ -20,12 +20,12 @@ taxon = "Insecta" # Acording the selected taxon_level, the desired taxon. If mor
 
 # Additional filter
 extra_filter = None # None for not adding an additional filter. Same settings as in "mainVariable"
-extra_subfilter = "Site 4" # Same settings as in "subvariable". If extra_filter = None, extra_subfilter does nothing.
+extra_subfilter = "Meadow" # Same settings as in "subvariable". If extra_filter = None, extra_subfilter does nothing.
 
 #---------------------#
 
 #Climatic variables
-clima = True # Activate temperature, windspeed, precipitation and solar radiaion for adding to the chart (True/False)
+clima = False # Activate temperature, windspeed, precipitation and solar radiaion for adding to the chart (True/False)
 temperature, temp_smoothing = [True, True] # First option from the list: True to display the climatic variable on the chart. Second option: True to smooth the displayed line
 wind_speed, wind_smoothing = [True, True]
 radiation, rad_smoothing = [False, True]
@@ -48,8 +48,8 @@ folder_sufix = None # Add an extra folder sufix to the results data folder and c
 #---------------------#
 
 # Quick options for generating Part 1 and Part 2 charts. Please before using this outcomment time_start, time_end, file_sufix, and plot_title from the upper configurations
-time_start, time_end, file_sufix, plot_title = ["2023-08-23 6:00",  "2023-09-01 19:00", "Part_1", True] 
-#time_start, time_end, file_sufix, plot_title = ["2023-09-02 6:00", "2023-09-13 19:00", "Part_2", False]
+#time_start, time_end, file_sufix, plot_title = ["2023-08-23 6:00",  "2023-09-01 19:00", "Part_1", True] 
+time_start, time_end, file_sufix, plot_title = ["2023-09-02 6:00", "2023-09-13 19:00", "Part_2", False]
 
 #---------------------#
 
