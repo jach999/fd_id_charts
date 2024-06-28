@@ -55,17 +55,14 @@ taxon_level_options = {
 
 extra_filter_options = {
     "Ambient": {
-        "All": "Show all subvariables",
         "Maize Field": "Maize field conditions",
         "Meadow": "Meadow conditions"
     },
     "Device_type": {
-        "All": "Show all subvariables",
         "FAIR-D": "FAIR-D devices",
         "ID": "ID devices"
     },
     "Device": {
-        "All": "Show all subvariables",
         "FAIR-D1": "FAIR-Device 1",
         "FAIR-D2": "FAIR-Device 2",
         "FAIR-D3": "FAIR-Device 3",
@@ -76,7 +73,6 @@ extra_filter_options = {
         "ID-4": "Insect Detect 4"
     },
     "Site": {
-        "All": "Show all subvariables",
         "Site 1": "Site 1 location",
         "Site 2": "Site 2 location"
     }

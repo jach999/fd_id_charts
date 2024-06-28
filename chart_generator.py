@@ -181,7 +181,9 @@ if create_chart == True:
         if extra_subfilter == "Maize Field":
             colors = ["gold", "goldenrod", "yellow", "orange"]
         elif extra_subfilter == "Meadow":
-            colors = ["olivedrab","yellowgreen", "forestgreen", "lime"]        
+            colors = ["olivedrab","yellowgreen", "forestgreen", "lime"]
+        else:
+            colors = None        
     else:
         colors = None
 

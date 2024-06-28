@@ -149,6 +149,9 @@ if is_valid_extra_subfilter(extra_filter, extra_subfilter):
     else:
         print(f"Selected extra subfilter: {extra_subfilter}")
 else:
-    print("Invalid extra subfilter. Please choose a valid option.")
+    if extra_subfilter == All:
+        print ("Invalid extra subfilter: All is not acceped, you must specify a valid option")
+    else:
+        print("Invalid extra subfilter: Please choose a valid option.")
 
 
