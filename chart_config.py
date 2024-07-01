@@ -25,7 +25,7 @@ extra_subfilter = "ID" # Same settings as in "subvariable". If extra_filter = No
 #---------------------#
 
 #Climatic variables
-clima = False # Activate temperature, windspeed, precipitation and solar radiaion for adding to the chart (True/False)
+clima = True # Activate temperature, windspeed, precipitation and solar radiaion for adding to the chart (True/False)
 temperature, temp_smoothing = [True, True] # First option from the list: True to display the climatic variable on the chart. Second option: True to smooth the displayed line
 wind_speed, wind_smoothing = [True, True]
 radiation, rad_smoothing = [False, True]
@@ -55,3 +55,6 @@ time_start, time_end, file_sufix, plot_title = ["2023-08-23 6:00",  "2023-09-01 
 
 # Set to true for rectifying the data due to the ID-3 failure, creating a FAKE ID-3 by multiplying data of ID-4 *2
 emend_id = True
+
+# Experimental
+relative_values = False

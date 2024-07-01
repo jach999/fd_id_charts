@@ -107,7 +107,25 @@ if device_type != All:
 dfg_filter_factor = insect_data_filtered.groupby([pd.Grouper(key="DateTime", freq= time_freq), mainVariable])[taxon_level].count().reset_index()
 
 # Make a pivot table with a column for each_filter_factor and insect count per day
-dfp_filter_factor = dfg_filter_factor.pivot(index="DateTime", columns=mainVariable, values=taxon_level)
+#fp_filter_factor = dfg_filter_factor.pivot(index="DateTime", columns=mainVariable, values=taxon_level)
+dfp_filter_factor = dfg_filter_factor.pivot_table(index="DateTime", columns=mainVariable, values=taxon_level, aggfunc='sum')
+# Calculate row sums
+dfp_filter_factor['Total'] = dfp_filter_factor.sum(axis=1)
+
+# Calculate mainVariable in relative values
+if relative_values == True:
+# Calculate relative columns for each value in mainVariable
+    for col in dfp_filter_factor.columns:
+        if col != 'Total':
+            dfp_filter_factor[f'{col}_relative'] = dfp_filter_factor[col] / dfp_filter_factor['Total']
+
+            # Drop the old absolute value column
+            dfp_filter_factor.drop(columns=[col], inplace=True)
+                    # Rename the new relative column without the "_relative" suffix
+            new_col_name = col.replace('_relative', '')
+            dfp_filter_factor.rename(columns={f'{col}_relative': new_col_name}, inplace=True)
+   
+dfp_filter_factor.to_csv("results/" + folder_result_name + "/" + folder_result_name +  '_filter_factor_count_table_test.csv', index=True)  # Set index=True to include row labels (index) in the CSV
 
 # Group by date (in a given time_freq) and by climatic variables
 dfg_clim = clim_data_timespan.groupby(pd.Grouper(key="DateTime", freq= time_freq)).agg({
@@ -117,9 +135,11 @@ dfg_clim = clim_data_timespan.groupby(pd.Grouper(key="DateTime", freq= time_freq
     "RAD":"mean"
 }).reset_index()
 
-# Delete data between 7 pm and 6 am
-dfg_clim['Hour'] = dfg_clim['DateTime'].dt.hour
-dfg_clim = dfg_clim[(dfg_clim['Hour'] >= 6) & (dfg_clim['Hour'] <= 19)]
+
+if hours < 24:
+    # Delete data between 7 pm and 6 am
+    dfg_clim['Hour'] = dfg_clim['DateTime'].dt.hour
+    dfg_clim = dfg_clim[(dfg_clim['Hour'] >= 6) & (dfg_clim['Hour'] <= 19)]
 
 
 # merge_filter_factor and climatic tables
@@ -181,9 +201,7 @@ if create_chart == True:
         if extra_subfilter == "Maize Field":
             colors = ["gold", "goldenrod", "yellow", "orange"]
         elif extra_subfilter == "Meadow":
-            colors = ["olivedrab","yellowgreen", "forestgreen", "lime"]
-        else:
-            colors = None        
+            colors = ["olivedrab","yellowgreen", "forestgreen", "lime"]        
     else:
         colors = None
 
