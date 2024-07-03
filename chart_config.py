@@ -16,18 +16,17 @@ device_type = All # Set to All to show all devices, or choose between "FAIR-D" o
 taxon_level = "Class" # "Class", "Order", "Suborder", "Family", "Subfamily", "Genus"
 taxon = "Insecta" # Acording the selected taxon_level, the desired taxon. If more than one is wanted:["taxon1","taxon2", ...] - Example for taxon_level = "Order": ["Diptera", "Coleoptera", "Hymenoptera"] 
 
-#---------------------#
-
 # Additional filter
 extra_filter = "Site" # None for not adding an additional filter. Same settings as in "mainVariable"
 extra_subfilter = "Site 2" # Same settings as in "subvariable". If extra_filter = None, extra_subfilter does nothing.
 
 #---------------------#
 
-fix_count_ylim = True
+# Change insect count y axis
+fix_count_ylim = True # True activates min and max y axis values
 min_count_ylim, max_count_ylim = [0, 200]
 
-#Climatic variables
+# Climatic variables
 clima = True # Activate temperature, windspeed, precipitation and solar radiaion for adding to the chart (True/False)
 
 temperature, temp_smoothing, fix_temp_ylim = [True, True, True] # First option from the list: True to display the climatic variable on the chart. Second option: True to smooth the displayed line. Third option: activates the y axis limits min_temp_ylim and max_temp_ylim
