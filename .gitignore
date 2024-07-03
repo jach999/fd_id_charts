@@ -4,3 +4,4 @@ other/
 __pycache__/
 .spyproject/
 results/
+experimental/

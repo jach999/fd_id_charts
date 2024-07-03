@@ -86,6 +86,7 @@ if timespan == True:
     clim_data_timespan = clim_data[(clim_data['DateTime'] >= time_start) & (clim_data['DateTime'] <= time_end)]
 else:
     insect_data_timespan = insect_data
+    clim_data_timespan = clim_data
 
 # Filter by taxon in the selected taxon level
 insect_data_filtered = insect_data_timespan[insect_data_timespan[taxon_level].isin(taxon)]
@@ -125,8 +126,6 @@ if relative_values == True:
             new_col_name = col.replace('_relative', '')
             dfp_filter_factor.rename(columns={f'{col}_relative': new_col_name}, inplace=True)
    
-dfp_filter_factor.to_csv("results/" + folder_result_name + "/" + folder_result_name +  '_filter_factor_count_table_test.csv', index=True)  # Set index=True to include row labels (index) in the CSV
-
 # Group by date (in a given time_freq) and by climatic variables
 dfg_clim = clim_data_timespan.groupby(pd.Grouper(key="DateTime", freq= time_freq)).agg({
     "AIRTEMP": "mean",
@@ -231,12 +230,16 @@ if create_chart == True:
     else:
         ax1 = ax1_merged_df.plot.bar(figsize=(figwidth, 8), legend=False, color=colors, alpha=0.7, fontsize=fontsize)
         ax1.set_xticklabels(ax1_merged_df.index.strftime("%Y-%m-%d %H:%M"), rotation=45, ha="right")
-
+        
+    if fix_count_ylim == True:
+        ax1.set_ylim(min_count_ylim, max_count_ylim)   
+                
     ax1.set_xlabel("Date")
     ax1.set_ylabel("Insect Count", color="black") 
     ax1.tick_params(axis="y", labelcolor="black")
     ax1.set_facecolor("None") # Background of the axis transparent
     ax1.set_zorder(3) # Set the plotting order explicitly
+
 
 
     if clima == True:
@@ -263,6 +266,11 @@ if create_chart == True:
                 # We use range(len(merged_df)) as the x-values to ensure alignment between the two DataFrames
                 ax2.plot(range(len(merged_df)), merged_df["AIRTEMP"], color="r", label="Temperature") # Plotting without smooting
             
+            if fix_temp_ylim == True:
+                ax2.set_ylim(min_temp_ylim, max_temp_ylim)
+            else:
+                 ax2.set_ylim(0, max(merged_df["AIRTEMP"]) + 2)  # Adjust the utemper limit as needed
+
             ax2.set_ylabel("Temperature (°C)", color="r")
             ax2.tick_params(axis="y", labelcolor="r")
             ax2.set_facecolor("None")
@@ -287,6 +295,11 @@ if create_chart == True:
             else:
                 ax3.plot(range(len(merged_df)), merged_df["WINDSPEED"], color="c", label="Wind Speed") # Plotting without smooting
             
+            if fix_wind_ylim == True:
+                ax3.set_ylim(min_wind_ylim, max_wind_ylim)
+            else:
+                 ax3.set_ylim(0, max(merged_df["WINDSPEED"]) + 2)  # Adjust the uwinder limit as needed
+
             ax3.set_ylabel("Wind Speed (m/s)", color="c")
             ax3.tick_params(axis="y", labelcolor="c")
             ax3.set_facecolor("None")
@@ -311,6 +324,11 @@ if create_chart == True:
             else:    
                 ax4.plot(range(len(merged_df)), merged_df["RAD"], color="darkorange", label="Radiation")
 
+            if fix_rad_ylim == True:
+                ax4.set_ylim(min_rad_ylim, max_rad_ylim)
+            else:
+                 ax4.set_ylim(0, max(merged_df["RAD"]) + 20)  # Adjust the urader limit as needed
+            
             ax4.set_ylabel("Radiation", color="darkorange")
             ax4.tick_params(axis="y", labelcolor="darkorange")
             ax4.set_facecolor("None")
@@ -327,7 +345,11 @@ if create_chart == True:
                     ax5.set_facecolor("None")
                     ax5.set_zorder(0)  # ax5 is plotted first
                     # Set the same y-axis limits for ax5
-                    ax5.set_ylim(0, max(merged_df["PRECIPITATION"]) + 10)  # Adjust the upper limit as needed
+                    if fix_pp_ylim == True:
+                        ax5.set_ylim(min_pp_ylim, max_pp_ylim)  # Adjust the upper limit as neede
+                    else:
+                        ax5.set_ylim(0, max(merged_df["PRECIPITATION"]) + 10)  # Adjust the upper limit as needed
+
                     combined_handles.append(ax5.fill_between(range(len(merged_df)), merged_df["PRECIPITATION"], color="lightskyblue", alpha=0.3))
                     combined_labels.append("Precipitation")
             
@@ -336,7 +358,6 @@ if create_chart == True:
         
     else:
         ax1.legend(loc="upper left", bbox_to_anchor=((-0.15, 1)))
-        
 
     if plot_title == True:
         plt.title(plt_title)
