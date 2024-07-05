@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from scipy.interpolate import make_interp_spline
 from chart_config import * # Configuration variables
 from src.dictionaries_control import *
+from matplotlib.ticker import ScalarFormatter, FuncFormatter
 
 # Load data
 HOME = os.path.dirname(__file__)
@@ -138,7 +139,7 @@ dfg_clim = clim_data_timespan.groupby(pd.Grouper(key="DateTime", freq= time_freq
 if hours < 24:
     # Delete data between 7 pm and 6 am
     dfg_clim['Hour'] = dfg_clim['DateTime'].dt.hour
-    dfg_clim = dfg_clim[(dfg_clim['Hour'] >= 6) & (dfg_clim['Hour'] <= 19)]
+    dfg_clim = dfg_clim[(dfg_clim['Hour'] >= hour_start) & (dfg_clim['Hour'] <= hour_end)]
 
 
 # merge_filter_factor and climatic tables
@@ -227,12 +228,44 @@ if create_chart == True:
     if hours >= 24:
         ax1 = ax1_merged_df.plot.bar(figsize=(figwidth, 8), legend=False, color=colors, alpha=0.7, fontsize=fontsize)
         ax1.set_xticklabels(ax1_merged_df.index.strftime("%Y-%m-%d"), rotation=45, ha="right")
+        y_values = ax1.get_yticks()
+        tick_values = np.linspace(min(y_values), max(y_values), num_ticks).astype(int)
+        ax1.set_yticks(tick_values)
     else:
         ax1 = ax1_merged_df.plot.bar(figsize=(figwidth, 8), legend=False, color=colors, alpha=0.7, fontsize=fontsize)
         ax1.set_xticklabels(ax1_merged_df.index.strftime("%Y-%m-%d %H:%M"), rotation=45, ha="right")
-        
+        y_values = ax1.get_yticks()
+        tick_values = np.linspace(min(y_values), max(y_values), num_ticks).astype(int)
+        ax1.set_yticks(tick_values)
+
+    # Y axis scaling options
     if fix_count_ylim == True:
-        ax1.set_ylim(min_count_ylim, max_count_ylim)   
+
+        if log_scale == True:
+            ax1.set_yscale("log")
+            # Customize y-axis tick labels
+            ax1.yaxis.set_major_formatter(ScalarFormatter(useOffset=False))
+            # Calculate logarithmic values
+            min_count_ylim = min_count_ylim + 1
+            log_step = np.log10(max_count_ylim / min_count_ylim) / (num_ticks - 1)
+            log_values = [min_count_ylim * 10**(i * log_step) for i in range(num_ticks)]
+            # Round the logarithmic values to the nearest integer
+            rounded_values = [int(round(val)) for val in log_values]
+            # Set custom y-axis ticks
+            ax1.set_yticks(rounded_values)
+        else:
+            ax1.set_ylim(min_count_ylim, max_count_ylim)
+            tick_values = np.linspace(min_count_ylim, max_count_ylim, num_ticks)
+            ax1.set_yticks(tick_values)
+    else:
+        if log_scale == True:
+            ax1.set_yscale("log")
+            ax1.yaxis.set_major_formatter(ScalarFormatter(useOffset=False))
+            # Set the desired number of ticks (e.g., six ticks)
+            tick_values = [10**i for i in range(num_ticks)]
+            ax1.set_yticks(tick_values)
+
+
                 
     ax1.set_xlabel("Date")
     ax1.set_ylabel("Insect Count", color="black") 
@@ -240,8 +273,8 @@ if create_chart == True:
     ax1.set_facecolor("None") # Background of the axis transparent
     ax1.set_zorder(3) # Set the plotting order explicitly
 
-
-
+        # Set y-axis scale to logarithmic
+   
     if clima == True:
     
         # Create a single legend for all axes
