@@ -1,11 +1,12 @@
 import os
 import pandas as pd
+pd.options.mode.chained_assignment = None  # default='warn'
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import make_interp_spline
 from chart_config import * # Configuration variables
 from src.dictionaries_control import *
-from matplotlib.ticker import ScalarFormatter, FuncFormatter
+from matplotlib.ticker import ScalarFormatter
 
 # Load data
 HOME = os.path.dirname(__file__)
@@ -61,6 +62,7 @@ if not os.path.exists("results/" + folder_result_name):
 
 print("Data saved in: /results/"+ folder_result_name)
 
+# Read the source folders
 insect_data = pd.read_excel("source_tables/id_faird.xlsx", sheet_name="Results", header=0, decimal=",")
 clim_data = pd.read_excel("source_tables/clim_data.xlsx", sheet_name="ClimData", header=0, decimal=",")
 
@@ -88,6 +90,16 @@ if timespan == True:
 else:
     insect_data_timespan = insect_data
     clim_data_timespan = clim_data
+
+
+# Delete data between 7 pm and 6 am - if hours >= 24 before clim data aggregation
+if hours >= 24:
+    clim_data_timespan['Hour'] = clim_data_timespan['DateTime'].dt.hour
+    clim_data_timespan = clim_data_timespan[(clim_data_timespan ['Hour'] >= hour_start) & (clim_data_timespan['Hour'] <= hour_end)]
+
+
+insect_data_timespan['Hour'] = insect_data_timespan['DateTime'].dt.hour
+insect_data_timespan = insect_data_timespan[(insect_data_timespan ['Hour'] >= hour_start) & (insect_data_timespan['Hour'] <= hour_end)]
 
 # Filter by taxon in the selected taxon level
 insect_data_filtered = insect_data_timespan[insect_data_timespan[taxon_level].isin(taxon)]
@@ -135,12 +147,10 @@ dfg_clim = clim_data_timespan.groupby(pd.Grouper(key="DateTime", freq= time_freq
     "RAD":"mean"
 }).reset_index()
 
-
+# Delete data between 7 pm and 6 am - if hours < 24 after clim data aggregation
 if hours < 24:
-    # Delete data between 7 pm and 6 am
     dfg_clim['Hour'] = dfg_clim['DateTime'].dt.hour
-    dfg_clim = dfg_clim[(dfg_clim['Hour'] >= hour_start) & (dfg_clim['Hour'] <= hour_end)]
-
+    dfg_clim = dfg_clim[(dfg_clim ['Hour'] >= hour_start) & (dfg_clim['Hour'] <= hour_end)]
 
 # merge_filter_factor and climatic tables
 merged_df =  pd.merge(dfp_filter_factor, dfg_clim, on="DateTime", how="outer")
@@ -177,7 +187,7 @@ if result_tables == True:
     # Save merged_data to a CSV file (adjust the file path as needed)
     #insect_data_filtered.to_csv("results/" + folder_result_name +  "/" + folder_result_name + '_insect_data_filtered.csv', index=False)
     # Save the date and cimatic group table to a CSV file
-    #dfg_clim.to_csv("results/" + folder_result_name + "/" + folder_result_name +  '_dfg_clim_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
+    dfg_clim.to_csv("results/" + folder_result_name + "/" + folder_result_name +  '_dfg_clim_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
     # Save the merged table to a CSV file
     merged_df.to_csv("results/" + folder_result_name + "/" + file_result_name +  '_result_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
     # Save the ax1_merged table to a CSV file
@@ -228,15 +238,10 @@ if create_chart == True:
     if hours >= 24:
         ax1 = ax1_merged_df.plot.bar(figsize=(figwidth, 8), legend=False, color=colors, alpha=0.7, fontsize=fontsize)
         ax1.set_xticklabels(ax1_merged_df.index.strftime("%Y-%m-%d"), rotation=45, ha="right")
-        y_values = ax1.get_yticks()
-        tick_values = np.linspace(min(y_values), max(y_values), num_ticks).astype(int)
-        ax1.set_yticks(tick_values)
     else:
         ax1 = ax1_merged_df.plot.bar(figsize=(figwidth, 8), legend=False, color=colors, alpha=0.7, fontsize=fontsize)
         ax1.set_xticklabels(ax1_merged_df.index.strftime("%Y-%m-%d %H:%M"), rotation=45, ha="right")
-        y_values = ax1.get_yticks()
-        tick_values = np.linspace(min(y_values), max(y_values), num_ticks).astype(int)
-        ax1.set_yticks(tick_values)
+
 
     # Y axis scaling options
     if fix_count_ylim == True:
@@ -263,6 +268,10 @@ if create_chart == True:
             ax1.yaxis.set_major_formatter(ScalarFormatter(useOffset=False))
             # Set the desired number of ticks (e.g., six ticks)
             tick_values = [10**i for i in range(num_ticks)]
+            ax1.set_yticks(tick_values)
+        else:
+            y_values = ax1.get_yticks()
+            tick_values = np.linspace(min(y_values), max(y_values), num_ticks).astype(int)
             ax1.set_yticks(tick_values)
 
 
