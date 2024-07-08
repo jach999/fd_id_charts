@@ -3,10 +3,10 @@ All = "All"
 #---------------------#
 
 # Time
-time_freq = "3 H" # The values ​​should be multiples or divisors of 24 plus a "H". Example: "12 H"
+time_freq = "1 H" # The values ​​should be multiples or divisors of 24 plus a "H". Example: "12 H"
 timespan = True # True to activate time_start and time_end, or False for covering the entire experiment time
 #time_start, time_end = ["2023-08-23",  "2023-09-01"] # Format: "YYYY-MM-DD"
-hour_start, hour_end = [6, 19] # Daily start and end hours
+hour_start, hour_end = [7, 18] # Daily start and end hours
 
 #---------------------#
 
@@ -25,8 +25,8 @@ extra_subfilter = "Site 1" # Same settings as in "subvariable". If extra_filter 
 
 # # Y-axis scaling options
 log_scale = False # Activate Y-axis logarithmic scale
-fix_count_ylim = False # True activates min and max Y-axis values
-min_count_ylim, max_count_ylim = [0, 200]
+fix_count_ylim = True # True activates min and max Y-axis values
+min_count_ylim, max_count_ylim = [0, 60]
 num_ticks = 7 # Num of Y-axis ticks if 
 
 # Climatic variables

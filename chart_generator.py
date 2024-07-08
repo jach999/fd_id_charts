@@ -23,6 +23,7 @@ else:
     file_sufix = ""
 
 hours = int(time_freq.split()[0])  # Extract the numeric value from time_freq
+minute_start = hour_start * 60
 
 # Handle cases when taxon = list
 if not isinstance(taxon, list):
@@ -83,14 +84,17 @@ clim_data.fillna(0, inplace=True)
 # Create the new column "CheckinDate" with combined date and time
 insect_data = insect_data.sort_values(by="DateTime")
 
+# Add hour_start, hour_end to time_start, time_end,
+start_datetime = pd.to_datetime(time_start) + pd.to_timedelta(hour_start, unit='h')
+end_datetime = pd.to_datetime(time_end) + pd.to_timedelta(hour_end, unit='h')
+
 # Filter by time window (timespan)
 if timespan == True:
-    insect_data_timespan = insect_data[(insect_data['DateTime'] >= time_start) & (insect_data['DateTime'] <= time_end)]
-    clim_data_timespan = clim_data[(clim_data['DateTime'] >= time_start) & (clim_data['DateTime'] <= time_end)]
+    insect_data_timespan = insect_data[(insect_data['DateTime'] >= start_datetime) & (insect_data['DateTime'] <= end_datetime)]
+    clim_data_timespan = clim_data[(clim_data['DateTime'] >= start_datetime) & (clim_data['DateTime'] <= end_datetime)]
 else:
     insect_data_timespan = insect_data
     clim_data_timespan = clim_data
-
 
 # Delete data between hour_start and hour_end
 clim_data_timespan['Hour'] = clim_data_timespan['DateTime'].dt.hour
@@ -115,7 +119,7 @@ if device_type != All:
 
 
 # Group by date (in a given time_freq) and by mainVariable
-dfg_filter_factor = insect_data_filtered.groupby([pd.Grouper(key="DateTime", freq= time_freq), mainVariable])[taxon_level].count().reset_index()
+dfg_filter_factor = insect_data_filtered.groupby([pd.Grouper(key="DateTime", freq= time_freq, offset=f"{minute_start}T"), mainVariable])[taxon_level].count().reset_index()
 
 # Make a pivot table with a column for each_filter_factor and insect count per day
 #fp_filter_factor = dfg_filter_factor.pivot(index="DateTime", columns=mainVariable, values=taxon_level)
@@ -135,9 +139,10 @@ if relative_values == True:
                     # Rename the new relative column without the "_relative" suffix
             new_col_name = col.replace('_relative', '')
             dfp_filter_factor.rename(columns={f'{col}_relative': new_col_name}, inplace=True)
+
    
 # Group by date (in a given time_freq) and by climatic variables
-dfg_clim = clim_data_timespan.groupby(pd.Grouper(key="DateTime", freq= time_freq)).agg({
+dfg_clim = clim_data_timespan.groupby(pd.Grouper(key="DateTime", freq= time_freq, offset=f"{minute_start}T")).agg({
     "AIRTEMP": "mean",
     "WINDSPEED": "mean",
     "PRECIPITATION": "sum",
@@ -184,7 +189,7 @@ if result_tables == True:
     # Save merged_data to a CSV file (adjust the file path as needed)
     #insect_data_filtered.to_csv("results/" + folder_result_name +  "/" + folder_result_name + '_insect_data_filtered.csv', index=False)
     # Save the date and cimatic group table to a CSV file
-    dfg_clim.to_csv("results/" + folder_result_name + "/" + folder_result_name +  '_dfg_clim_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
+    #dfg_clim.to_csv("results/" + folder_result_name + "/" + file_result_name +  '_dfg_clim_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
     # Save the merged table to a CSV file
     merged_df.to_csv("results/" + folder_result_name + "/" + file_result_name +  '_result_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
     # Save the ax1_merged table to a CSV file
