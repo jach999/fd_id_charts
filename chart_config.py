@@ -3,7 +3,7 @@ All = "All"
 #---------------------#
 
 # Time
-time_freq = "24 H" # The values ​​should be multiples or divisors of 24 plus a "H". Example: "12 H"
+time_freq = "3 H" # The values ​​should be multiples or divisors of 24 plus a "H". Example: "12 H"
 timespan = True # True to activate time_start and time_end, or False for covering the entire experiment time
 #time_start, time_end = ["2023-08-23",  "2023-09-01"] # Format: "YYYY-MM-DD"
 hour_start, hour_end = [6, 19] # Daily start and end hours

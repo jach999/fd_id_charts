@@ -92,12 +92,9 @@ else:
     clim_data_timespan = clim_data
 
 
-# Delete data between 7 pm and 6 am - if hours >= 24 before clim data aggregation
-if hours >= 24:
-    clim_data_timespan['Hour'] = clim_data_timespan['DateTime'].dt.hour
-    clim_data_timespan = clim_data_timespan[(clim_data_timespan ['Hour'] >= hour_start) & (clim_data_timespan['Hour'] <= hour_end)]
-
-
+# Delete data between hour_start and hour_end
+clim_data_timespan['Hour'] = clim_data_timespan['DateTime'].dt.hour
+clim_data_timespan = clim_data_timespan[(clim_data_timespan ['Hour'] >= hour_start) & (clim_data_timespan['Hour'] <= hour_end)]
 insect_data_timespan['Hour'] = insect_data_timespan['DateTime'].dt.hour
 insect_data_timespan = insect_data_timespan[(insect_data_timespan ['Hour'] >= hour_start) & (insect_data_timespan['Hour'] <= hour_end)]
 
@@ -147,7 +144,7 @@ dfg_clim = clim_data_timespan.groupby(pd.Grouper(key="DateTime", freq= time_freq
     "RAD":"mean"
 }).reset_index()
 
-# Delete data between 7 pm and 6 am - if hours < 24 after clim data aggregation
+# Delete empty rows between hour_start and hour_end- if hours < 24 after clim data aggregation
 if hours < 24:
     dfg_clim['Hour'] = dfg_clim['DateTime'].dt.hour
     dfg_clim = dfg_clim[(dfg_clim ['Hour'] >= hour_start) & (dfg_clim['Hour'] <= hour_end)]
