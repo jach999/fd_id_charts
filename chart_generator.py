@@ -178,6 +178,9 @@ for var in unique_main_variables:
     # Assign it to the new DataFrame with the desired column name
     ax1_merged_df[var] = column_data
 
+    # Sort the column names alphabetically so that label colors are assigned consistently
+ax1_merged_df = ax1_merged_df.sort_index(axis=1)
+
 
 if result_tables == True:
     #insect_data.to_csv("results/" + folder_result_name + '/insect_data.csv', index=False)
@@ -185,15 +188,15 @@ if result_tables == True:
     # Save the date and filter_factor group table to a CSV file
     dfg_filter_factor.to_csv("results/" + folder_result_name + "/" + file_result_name + '_filter_factors_group_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
     # Save the filter_factor pivot table to a CSV file
-    #dfp_filter_factor.to_csv("results/" + folder_result_name + "/" + folder_result_name +  '_filter_factor_count_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
+    #dfp_filter_factor.to_csv("results/" + folder_result_name + "/" + file_result_name +  '_filter_factor_count_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
     # Save merged_data to a CSV file (adjust the file path as needed)
-    #insect_data_filtered.to_csv("results/" + folder_result_name +  "/" + folder_result_name + '_insect_data_filtered.csv', index=False)
+    #insect_data_filtered.to_csv("results/" + folder_result_name +  "/" + file_result_name + '_insect_data_filtered.csv', index=False)
     # Save the date and cimatic group table to a CSV file
     #dfg_clim.to_csv("results/" + folder_result_name + "/" + file_result_name +  '_dfg_clim_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
     # Save the merged table to a CSV file
     merged_df.to_csv("results/" + folder_result_name + "/" + file_result_name +  '_result_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
     # Save the ax1_merged table to a CSV file
-    #ax1_merged_df.to_csv("results/" + folder_result_name + "/" + folder_result_name +  '_ax1_merged_df_table.csv', index=True)
+    #ax1_merged_df.to_csv("results/" + folder_result_name + "/" + file_result_name +  '_ax1_merged_df_table.csv', index=True)
     
 
 if create_chart == True:
@@ -295,8 +298,7 @@ if create_chart == True:
         if temperature == True:
             # Create a secondary y-axis for temperature
             ax2 = ax1.twinx()
-            ax2.spines["right"].set_position(("outward", 60))  # Adjust the position of the third y-axis
-                        
+                                    
             if temp_smoothing == True:
                 # Smooth the temperature data
                 temp_x_values = np.arange(len(merged_df))
@@ -325,7 +327,7 @@ if create_chart == True:
         if wind_speed == True:        
             # Create a tertiary y-axis for wind speed
             ax3 = ax1.twinx()
-            ax3.spines["right"].set_position(("outward", 120))  # Adjust the position of the third y-axis
+            ax3.spines["right"].set_position(("outward", 60))  # Adjust the position of the third y-axis
                         
             if wind_smoothing == True:
                 # Smooth the wind speed data
@@ -383,6 +385,7 @@ if create_chart == True:
         if precipitation == True:
                     # Plot the precipitation line and shaded area
                     ax5 = ax1.twinx()
+                    ax5.spines["right"].set_position(("outward", 120)) 
                     ax5.fill_between(range(len(merged_df)), merged_df["PRECIPITATION"], color="lightskyblue", alpha=0.3, label="Precipitation")
                     ax5.set_ylabel("Precipitation", color="lightskyblue")
                     ax5.tick_params(axis="y", labelcolor="lightskyblue")
