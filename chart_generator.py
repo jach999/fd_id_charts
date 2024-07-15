@@ -6,56 +6,19 @@ import matplotlib.pyplot as plt
 from scipy.interpolate import make_interp_spline
 from chart_config import * # Configuration variables
 from src.dictionaries_control import *
+from src.variables_handling import generate_time_variables, handle_strings
+from src.insect_data_processing import insect_data_process
+from src.clim_data_processing import clim_data_process
 from matplotlib.ticker import ScalarFormatter
 
 # Load data
 HOME = os.path.dirname(__file__)
 
-if folder_sufix != None:
-    folder_sufix = ("_" + folder_sufix)
-else:
-    folder_sufix = ""
+# Generate time variables
+hours, minute_start, start_datetime, end_datetime = generate_time_variables(time_freq, time_start, time_end, hour_start, hour_end)
 
-
-if file_sufix != None:
-    file_sufix = ("_" + file_sufix)
-else:
-    file_sufix = ""
-
-hours = int(time_freq.split()[0])  # Extract the numeric value from time_freq
-minute_start = hour_start * 60
-
-# Handle cases when taxon = list
-if not isinstance(taxon, list):
-    taxon = [taxon]
-if len(taxon) > 1:
-    taxon_chart_title = ', '.join(taxon[:-1]) + f", and {taxon[-1]}"
-else:
-    taxon_chart_title = taxon[0]
-
-if extra_subfilter != None:
-    subfilter_name = extra_subfilter.replace(" ", "_")
-
-if clima == True:
-    # Define the folder name where the .csv tables are saved
-    if extra_filter != None:
-        folder_result_name = f"{'_'.join(taxon)}_{mainVariable}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{subfilter_name}_Clima_{hours}H{folder_sufix}" 
-        file_result_name = f"{'_'.join(taxon)}_{mainVariable}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{subfilter_name}_Clima_{hours}H{file_sufix}"
-        plt_title = (taxon_chart_title + " " + taxon_level + " count by " + mainVariable.replace("_", " ") + " (" + subVariable + ")" + " and by " +  extra_filter + " (" + extra_subfilter + ")" + " with Climatic Conditions")
-    else:
-        folder_result_name = f"{'_'.join(taxon)}_{mainVariable}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_Clima_{hours}H{folder_sufix}"
-        file_result_name = f"{'_'.join(taxon)}_{mainVariable}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_Clima_{hours}H{file_sufix}"
-        plt_title = (taxon_chart_title + " " + taxon_level + " count by " +  mainVariable.replace("_", " ")  + " (" + subVariable + ")" + " with Climatic Conditions")
-else:
-    if extra_filter != None:
-       folder_result_name = f"{'_'.join(taxon)}_{mainVariable}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{subfilter_name}_{hours}H{folder_sufix}" 
-       file_result_name = f"{'_'.join(taxon)}_{mainVariable}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{subfilter_name}_{hours}H{file_sufix}"
-       plt_title = (taxon_chart_title + " " + taxon_level + " count by " +  mainVariable.replace("_", " ")  + " (" + subVariable + ")" + " and by " +  extra_filter + " (" + extra_subfilter + ")") 
-    else:        
-       # Define the folder name where the .csv tables are saved (without "_Clim")
-       folder_result_name = f"{'_'.join(taxon)}_{mainVariable}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{hours}H{folder_sufix}"
-       file_result_name = f"{'_'.join(taxon)}_{mainVariable}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{hours}H{file_sufix}"
-       plt_title = (taxon_chart_title + " " + taxon_level + " count by " +  mainVariable.replace("_", " ")  + " (" + subVariable + ")")
+# Generate strings
+folder_result_name, file_result_name, plt_title, taxon, folder_sufix, file_sufix = handle_strings(clima, taxon, mainVariable, subVariable, device_type, hours, folder_sufix, file_sufix, taxon_level, extra_filter, extra_subfilter, All)
 
 # Create the folder if it doesn't exist
 if not os.path.exists("results/" + folder_result_name):
@@ -63,97 +26,10 @@ if not os.path.exists("results/" + folder_result_name):
 
 print("Data saved in: /results/"+ folder_result_name)
 
-# Read the source folders
-insect_data = pd.read_excel("source_tables/id_faird.xlsx", sheet_name="Results", header=0, decimal=",")
-clim_data = pd.read_excel("source_tables/clim_data.xlsx", sheet_name="ClimData", header=0, decimal=",")
-
-# Convert "Checkin" and "Time" columns to datetime
-insect_data["DateTime"] = pd.to_datetime(insect_data["Checkin"], format='%d.%m.%Y %H:%M', errors="coerce")
-clim_data["DateTime"] = pd.to_datetime(clim_data["Time"], format='%d.%m.%Y %H:%M', errors="coerce")
-
-# If False, the fake ID-3 data is deleted
-if emend_id != True:
-    insect_data = insect_data[insect_data["Device"] != "ID-3"]
-
-# Convert in clim_data any non-numeric value into numeric 
-cols = clim_data.columns.drop('DateTime')
-clim_data[cols] = clim_data[cols].apply(pd.to_numeric, errors='coerce')
-# Replace NaN values with zeros
-clim_data.fillna(0, inplace=True)
-
-# Create the new column "CheckinDate" with combined date and time
-insect_data = insect_data.sort_values(by="DateTime")
-
-# Add hour_start, hour_end to time_start, time_end,
-start_datetime = pd.to_datetime(time_start) + pd.to_timedelta(hour_start, unit='h')
-end_datetime = pd.to_datetime(time_end) + pd.to_timedelta(hour_end, unit='h')
-
-# Filter by time window (timespan)
-if timespan == True:
-    insect_data_timespan = insect_data[(insect_data['DateTime'] >= start_datetime) & (insect_data['DateTime'] <= end_datetime)]
-    clim_data_timespan = clim_data[(clim_data['DateTime'] >= start_datetime) & (clim_data['DateTime'] <= end_datetime)]
-else:
-    insect_data_timespan = insect_data
-    clim_data_timespan = clim_data
-
-# Delete data between hour_start and hour_end
-clim_data_timespan['Hour'] = clim_data_timespan['DateTime'].dt.hour
-clim_data_timespan = clim_data_timespan[(clim_data_timespan ['Hour'] >= hour_start) & (clim_data_timespan['Hour'] <= hour_end)]
-insect_data_timespan['Hour'] = insect_data_timespan['DateTime'].dt.hour
-insect_data_timespan = insect_data_timespan[(insect_data_timespan ['Hour'] >= hour_start) & (insect_data_timespan['Hour'] <= hour_end)]
-
-# Filter by taxon in the selected taxon level
-insect_data_filtered = insect_data_timespan[insect_data_timespan[taxon_level].isin(taxon)]
-
-# Filter by subvariable in the selected filter factor
-if subVariable != All:
-    insect_data_filtered = insect_data_filtered[insect_data_filtered[mainVariable] == subVariable]
-
-# Filter by subfilter in the selected filter factor
-if extra_filter != None:
-   insect_data_filtered = insect_data_filtered[insect_data_filtered[extra_filter] == extra_subfilter]
-
-# If device_type is set to All, all device_type are displayed
-if device_type != All:
-    insect_data_filtered = insect_data_filtered[insect_data_filtered["Device_type"] == device_type]
-
-
-# Group by date (in a given time_freq) and by mainVariable
-dfg_filter_factor = insect_data_filtered.groupby([pd.Grouper(key="DateTime", freq= time_freq, offset=f"{minute_start}T"), mainVariable])[taxon_level].count().reset_index()
-
-# Make a pivot table with a column for each_filter_factor and insect count per day
-#fp_filter_factor = dfg_filter_factor.pivot(index="DateTime", columns=mainVariable, values=taxon_level)
-dfp_filter_factor = dfg_filter_factor.pivot_table(index="DateTime", columns=mainVariable, values=taxon_level, aggfunc='sum')
-# Calculate row sums
-dfp_filter_factor['Total'] = dfp_filter_factor.sum(axis=1)
-
-# Calculate mainVariable in relative values
-if relative_values == True:
-# Calculate relative columns for each value in mainVariable
-    for col in dfp_filter_factor.columns:
-        if col != 'Total':
-            dfp_filter_factor[f'{col}_relative'] = dfp_filter_factor[col] / dfp_filter_factor['Total']
-
-            # Drop the old absolute value column
-            dfp_filter_factor.drop(columns=[col], inplace=True)
-                    # Rename the new relative column without the "_relative" suffix
-            new_col_name = col.replace('_relative', '')
-            dfp_filter_factor.rename(columns={f'{col}_relative': new_col_name}, inplace=True)
-
+# Process insct data and clima data functions
+dfp_filter_factor, dfg_filter_factor = insect_data_process(start_datetime, end_datetime, minute_start, hour_start, hour_end, taxon, taxon_level, mainVariable, subVariable, device_type, extra_filter, extra_subfilter)
+dfg_clim = clim_data_process(start_datetime, end_datetime, minute_start, hours, timespan=True)
    
-# Group by date (in a given time_freq) and by climatic variables
-dfg_clim = clim_data_timespan.groupby(pd.Grouper(key="DateTime", freq= time_freq, offset=f"{minute_start}T")).agg({
-    "AIRTEMP": "mean",
-    "WINDSPEED": "mean",
-    "PRECIPITATION": "sum",
-    "RAD":"mean"
-}).reset_index()
-
-# Delete empty rows between hour_start and hour_end- if hours < 24 after clim data aggregation
-if hours < 24:
-    dfg_clim['Hour'] = dfg_clim['DateTime'].dt.hour
-    dfg_clim = dfg_clim[(dfg_clim ['Hour'] >= hour_start) & (dfg_clim['Hour'] <= hour_end)]
-
 # merge_filter_factor and climatic tables
 merged_df =  pd.merge(dfp_filter_factor, dfg_clim, on="DateTime", how="outer")
 
@@ -206,7 +82,9 @@ if create_chart == True:
     elif device_type != All:
         colors = ["gold", "orange", "olivedrab", "yellowgreen"]
     elif device_type == All and mainVariable == "Site":
-        colors = ["gold", "olivedrab", "orange", "yellowgreen"]
+        colors = ["gold", "orange", "olivedrab", "yellowgreen"]
+    elif mainVariable == "Device x Ambient":
+        colors = ["gold", "olivedrab", "orange", "yellowgreen"]        
     elif extra_filter == "Site":
         if extra_subfilter == "Site 1" or extra_subfilter == "Site 2":
             colors = ["gold", "goldenrod"]
@@ -244,7 +122,7 @@ if create_chart == True:
         ax1 = ax1_merged_df.plot.bar(figsize=(figwidth, 8), legend=False, color=colors, alpha=0.7, fontsize=fontsize)
         ax1.set_xticklabels(ax1_merged_df.index.strftime("%Y-%m-%d"), rotation=45, ha="right")
     else:
-        ax1 = ax1_merged_df.plot.bar(figsize=(figwidth, 8), legend=False, color=colors, alpha=0.7, fontsize=fontsize)
+        ax1 = ax1_merged_df.plot.bar(figsize=(figwidth, 8), legend=False, color=colors, alpha=0.7, fontsize=fontsize, width=0.8)
         ax1.set_xticklabels(ax1_merged_df.index.strftime("%Y-%m-%d %H:%M"), rotation=45, ha="right")
 
 

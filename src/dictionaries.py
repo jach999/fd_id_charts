@@ -34,7 +34,15 @@ mainVariable_options = {
         "All": "Show all subvariables",
         "Site 1": "Site 1 location",
         "Site 2": "Site 2 location"
+    },
+    "Device x Ambient": {
+        "All": "Show all subvariables",
+        "FAIR-D - Maize Field": "FAIR-D in Maize Field",
+        "FAIR-D - Meadow": "FAIR-D in Meadow",
+        "ID - Maize Field": "ID in Maize Field",
+        "ID - Meadow": "ID in Meadow"
     }
+
 }
 
 device_type_options = {
