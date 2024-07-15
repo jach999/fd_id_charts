@@ -11,22 +11,22 @@ hour_start, hour_end = [7, 18] # Daily start and end hours
 #---------------------#
 
 # Modify these factors to display different info in the charts
-mainVariable = "Site" # "Device type", "Device", "Ambient", "Site", and "Devixe x Ambient"
+mainVariable = "Device" # "Device type", "Device", "Ambient", "Site", and "Devixe x Ambient"
 subVariable = All #  Set to All to show all. In "Device_type": FAIR-D or "ID"; in "Device": FAIR-D1 -D2, -D3, or -D4, ID1, ID2, ID4; in "Ambient": "Maize Field" or "Meadow"; in "Site": "Site 1", "Site 2", "Site 3", "Site 4"; in "Device x Ambient": “FAIR-D - Maize Field”, “FAIR-D - Meadow”, “ID - Maize Field”, “ID - Meadow”
 device_type = All # Set to All to show all devices, or choose between "FAIR-D" or "ID"
 taxon_level = "Class" # "Class", "Order", "Suborder", "Family", "Subfamily", "Genus"
 taxon = "Insecta" # Acording the selected taxon_level, the desired taxon. If more than one is wanted:["taxon1","taxon2", ...] - Example for taxon_level = "Order": ["Diptera", "Coleoptera", "Hymenoptera"] 
 
 # Additional filter
-extra_filter = None # None for not adding an additional filter. Same settings as in "mainVariable"
-extra_subfilter = "FAIR-D" # Same settings as in "subvariable". If extra_filter = None, extra_subfilter does nothing.
+extra_filter = "Site" # None for not adding an additional filter. Same settings as in "mainVariable"
+extra_subfilter = "Site 1" # Same settings as in "subvariable". If extra_filter = None, extra_subfilter does nothing.
 
 #---------------------#
 
 # # Y-axis scaling options
 log_scale = False # Activate Y-axis logarithmic scale
 fix_count_ylim = True # True activates min and max Y-axis values
-min_count_ylim, max_count_ylim = [0, 300]
+min_count_ylim, max_count_ylim = [0, 170]
 num_ticks = 7 # Num of Y-axis ticks if 
 
 # Climatic variables
@@ -62,8 +62,8 @@ folder_sufix = None # Add an extra folder sufix to the results data folder and c
 #---------------------#
 
 # Quick options for generating Part 1 and Part 2 charts. Please before using this outcomment time_start, time_end, file_sufix, and plot_title from the upper configurations
-time_start, time_end, file_sufix, plot_title = ["2023-08-23",  "2023-09-02", "Part_1", True] 
-#time_start, time_end, file_sufix, plot_title = ["2023-09-03", "2023-09-13", "Part_2", False]
+#time_start, time_end, file_sufix, plot_title = ["2023-08-23",  "2023-09-02", "Part_1", True] 
+time_start, time_end, file_sufix, plot_title = ["2023-09-03", "2023-09-13", "Part_2", False]
 
 #---------------------#
 

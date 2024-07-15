@@ -144,7 +144,9 @@ if create_chart == True:
         else:
             ax1.set_ylim(min_count_ylim, max_count_ylim)
             tick_values = np.linspace(min_count_ylim, max_count_ylim, num_ticks)
-            ax1.set_yticks(tick_values)
+            rounded_values = [int(round(val)) for val in tick_values]
+            # Set custom y-axis ticks
+            ax1.set_yticks(rounded_values)
     else:
         if log_scale == True:
             ax1.set_yscale("log")
