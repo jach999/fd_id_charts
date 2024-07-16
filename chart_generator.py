@@ -26,9 +26,9 @@ if not os.path.exists("results/" + folder_result_name):
 
 print("Data saved in: /results/"+ folder_result_name)
 
-# Process insct data and clima data functions
-dfp_filter_factor, dfg_filter_factor = insect_data_process(start_datetime, end_datetime, minute_start, hour_start, hour_end, taxon, taxon_level, mainVariable, subVariable, device_type, extra_filter, extra_subfilter)
-dfg_clim = clim_data_process(start_datetime, end_datetime, minute_start, hours, timespan=True)
+# Process insect data and clima data functions
+dfp_filter_factor, dfg_filter_factor = insect_data_process(start_datetime, end_datetime, minute_start, hour_start, hour_end, taxon, taxon_level, mainVariable, subVariable, device_type, extra_filter, extra_subfilter, All, time_freq, timespan, emend_id, relative_values)
+dfg_clim = clim_data_process(start_datetime, end_datetime, minute_start, hours, timespan)
    
 # merge_filter_factor and climatic tables
 merged_df =  pd.merge(dfp_filter_factor, dfg_clim, on="DateTime", how="outer")
