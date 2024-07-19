@@ -9,6 +9,7 @@ from src.dictionaries_control import *
 from src.variables_handling import generate_time_variables, handle_strings
 from src.insect_data_processing import insect_data_process
 from src.clim_data_processing import clim_data_process
+from src.labels import ecv_value_label, ecv_value_label_color, custom_colors
 from matplotlib.ticker import ScalarFormatter
 
 # Load data
@@ -76,7 +77,8 @@ if result_tables == True:
     
 
 if create_chart == True:
-    # Define colors based on conditions
+    colors = [custom_colors.get(var, 'magenta') for var in unique_main_variables]
+    """# Define colors based on conditions
     if mainVariable == "Ambient":
         colors = ["gold", "olivedrab"]
     elif device_type != All:
@@ -96,7 +98,7 @@ if create_chart == True:
         elif extra_subfilter == "Meadow":
             colors = ["olivedrab","yellowgreen", "forestgreen", "lime"]        
     else:
-        colors = None
+        colors = None"""
 
     # Calculate the number of data points within the specified time_freq
     data_points = len(ax1_merged_df)
@@ -233,7 +235,11 @@ if create_chart == True:
             combined_handles.extend(ax3.get_legend_handles_labels()[0])
             combined_labels.extend(ax3.get_legend_handles_labels()[1])
 
-        if radiation == True:
+        if extra_clim_variable == True:
+            # Use ecv_value to look up the label in the dictionary
+            ecv_label = ecv_value_label[ecv_value]
+             # Use ecv_value to look up the label color in the dictionary
+            ecv_label_color = ecv_value_label_color[ecv_value]
             # Create a tertiary y-axis for radiation
             ax4 = ax1.twinx()
             ax4.spines["right"].set_position(("outward", 180))  # Adjust the position of the third y-axis
@@ -241,22 +247,22 @@ if create_chart == True:
             if rad_smoothing == True:   
                # Smooth the solar radiation data
                 rad_x_values = np.arange(len(merged_df))
-                rad_y_values = merged_df["RAD"]
+                rad_y_values = merged_df[ecv_value]
                 rad_xnew = np.linspace(rad_x_values.min(), rad_x_values.max(), x_points)  # Create a smoother x-axis
                 rad_spl = make_interp_spline(rad_x_values, rad_y_values, k=k)  # Use cubic spline (adjust k as needed)
                 rad_ynew = rad_spl(rad_xnew)
                 # Plot the smoothed raderature curve
-                ax4.plot(rad_xnew, rad_ynew, color="darkorange", label="Solar radiation") 
+                ax4.plot(rad_xnew, rad_ynew, color=ecv_label_color, label=ecv_label) 
             else:    
-                ax4.plot(range(len(merged_df)), merged_df["RAD"], color="darkorange", label="Radiation")
+                ax4.plot(range(len(merged_df)), merged_df[ecv_value], color=ecv_label_color, label=ecv_label)
 
             if fix_rad_ylim == True:
                 ax4.set_ylim(min_rad_ylim, max_rad_ylim)
             else:
-                 ax4.set_ylim(0, max(merged_df["RAD"]) + 20)  # Adjust the urader limit as needed
+                 ax4.set_ylim(0, max(merged_df[ecv_value]) + 20)  # Adjust the urader limit as needed
             
-            ax4.set_ylabel("Radiation", color="darkorange")
-            ax4.tick_params(axis="y", labelcolor="darkorange")
+            ax4.set_ylabel(ecv_label, color=ecv_label_color)
+            ax4.tick_params(axis="y", labelcolor=ecv_label_color)
             ax4.set_facecolor("None")
             ax4.set_zorder(0)
             combined_handles.extend(ax4.get_legend_handles_labels()[0])
