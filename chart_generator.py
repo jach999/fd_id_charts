@@ -16,10 +16,10 @@ from matplotlib.ticker import ScalarFormatter
 HOME = os.path.dirname(__file__)
 
 # Generate time variables
-hours, minute_start, start_datetime, end_datetime = generate_time_variables(time_freq, time_start, time_end, hour_start, hour_end)
+hours, minute_start, start_datetime, end_datetime = generate_time_variables(timespan, time_freq, hour_start, hour_end, "2023-08-23", "2023-09-01")
 
 # Generate strings
-folder_result_name, file_result_name, plt_title, taxon, folder_sufix, file_sufix = handle_strings(clima, taxon, mainVariable, subVariable, device_type, hours, folder_sufix, file_sufix, taxon_level, extra_filter, extra_subfilter, All)
+folder_result_name, file_result_name, plt_title, taxon, folder_sufix, file_sufix = handle_strings(clima, taxon, mainVariable, subVariable, device_type, time_freq, folder_sufix, file_sufix, taxon_level, extra_filter, extra_subfilter, All)
 
 # Create the folder if it doesn't exist
 if not os.path.exists("results/" + folder_result_name):

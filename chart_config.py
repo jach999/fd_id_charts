@@ -3,8 +3,8 @@ All = "All"
 #---------------------#
 
 # Time
-time_freq = "3 H" # The values ​​should be multiples or divisors of 24 plus a "H". Example: "12 H"
-timespan = True # True to activate time_start and time_end, or False for covering the entire experiment time
+time_freq = "15 min" # The values ​​should be multiples or divisors of 24 and have time units. Example: "12 H" or "15 min"
+timespan = False # True to activate time_start and time_end, or False for covering the entire experiment time
 #time_start, time_end = ["2023-08-23",  "2023-09-01"] # Format: "YYYY-MM-DD"
 hour_start, hour_end = [7, 18] # Daily start and end hours
 
@@ -25,7 +25,7 @@ extra_subfilter = "Site 1" # Same settings as in "subvariable". If extra_filter 
 
 # # Insect count Y-axis scaling options
 log_scale = False # Activate Y-axis logarithmic scale
-fix_count_ylim = True # True activates min and max Y-axis values
+fix_count_ylim = False # True activates min and max Y-axis values
 min_count_ylim, max_count_ylim = [0, 300]
 num_ticks = 7 # Num of Y-axis ticks if 
 
@@ -41,7 +41,7 @@ min_wind_ylim, max_wind_ylim = [0, 14]
 precipitation, fix_pp_ylim = [True, True] 
 min_pp_ylim, max_pp_ylim = [0, 15]
 
-extra_clim_variable, ecv_value, ecv_smoothing, fix_ecv_ylim = [True, "AIRP", True, True] # extra_clim_variable,: True for activating an extra climatic variable. ecv_value: "RAD" for displaying "Solar Radiation", "RH" for "Relative Humidity","GROUNDTEMP" for "Ground Temperature", and "AIRP" for "Air Pressure"
+extra_clim_variable, ecv_value, ecv_smoothing, fix_ecv_ylim = [False, "AIRP", True, True] # extra_clim_variable,: True for activating an extra climatic variable. ecv_value: "RAD" for displaying "Solar Radiation", "RH" for "Relative Humidity","GROUNDTEMP" for "Ground Temperature", and "AIRP" for "Air Pressure"
 min_ecv_ylim, max_ecv_ylim = [900, 1050]
 
 # Smoothing settings
@@ -51,7 +51,7 @@ k = 2 # Smoothing factor
 #---------------------#
 
 # Results managing
-result_tables = False # Saves the interim result tables in the result/ folder
+result_tables = True # Saves the interim result tables in the result/ folder
 create_chart = True # Activates the save_chart and display_chart options
 save_chart = False # Save chart .png file in the result/ folder
 display_chart = True # Display the generated chart in a new window
