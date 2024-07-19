@@ -41,7 +41,7 @@ min_wind_ylim, max_wind_ylim = [0, 14]
 precipitation, fix_pp_ylim = [True, True] 
 min_pp_ylim, max_pp_ylim = [0, 15]
 
-extra_clim_variable, ecv_value, rad_smoothing, fix_rad_ylim = [True, "AIRP", True, True] 
+extra_clim_variable, ecv_value, ecv_smoothing, fix_ecv_ylim = [True, "AIRP", True, True] # extra_clim_variable,: True for activating an extra climativ variable. ecv_value: "RAD" for displaying "Solar Radiation", "RH" for "Relative Humidity","GROUNDTEMP" for "Ground Temperature", and "AIRP" for "Air Pressure"
 min_rad_ylim, max_rad_ylim = [900, 1050]
 
 # Smoothing settings
