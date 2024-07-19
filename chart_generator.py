@@ -78,31 +78,9 @@ if result_tables == True:
 
 if create_chart == True:
     colors = [custom_colors.get(var, 'magenta') for var in unique_main_variables]
-    """# Define colors based on conditions
-    if mainVariable == "Ambient":
-        colors = ["gold", "olivedrab"]
-    elif device_type != All:
-        colors = ["gold", "orange", "olivedrab", "yellowgreen"]
-    elif device_type == All and mainVariable == "Site":
-        colors = ["gold", "orange", "olivedrab", "yellowgreen"]
-    elif mainVariable == "Device x Ambient":
-        colors = ["gold", "olivedrab", "orange", "yellowgreen"]        
-    elif extra_filter == "Site":
-        if extra_subfilter == "Site 1" or extra_subfilter == "Site 2":
-            colors = ["gold", "goldenrod"]
-        elif extra_subfilter == "Site 3" or extra_subfilter == "Site 4":
-            colors = ["yellowgreen", "olivedrab"]
-    elif extra_filter == "Ambient":
-        if extra_subfilter == "Maize Field":
-            colors = ["gold", "goldenrod", "yellow", "orange"]
-        elif extra_subfilter == "Meadow":
-            colors = ["olivedrab","yellowgreen", "forestgreen", "lime"]        
-    else:
-        colors = None"""
-
-    # Calculate the number of data points within the specified time_freq
+  
+     # Calculate the number of data points within the specified time_freq
     data_points = len(ax1_merged_df)
-
 
     # Set the bars width and the font based on the number of data points
     if data_points < 90:
@@ -240,24 +218,24 @@ if create_chart == True:
             ecv_label = ecv_value_label[ecv_value]
              # Use ecv_value to look up the label color in the dictionary
             ecv_label_color = ecv_value_label_color[ecv_value]
-            # Create a tertiary y-axis for radiation
+            # Create a tertiary y-axis for the extra climatic variable
             ax4 = ax1.twinx()
             ax4.spines["right"].set_position(("outward", 180))  # Adjust the position of the third y-axis
             
-            if rad_smoothing == True:   
-               # Smooth the solar radiation data
-                rad_x_values = np.arange(len(merged_df))
-                rad_y_values = merged_df[ecv_value]
-                rad_xnew = np.linspace(rad_x_values.min(), rad_x_values.max(), x_points)  # Create a smoother x-axis
-                rad_spl = make_interp_spline(rad_x_values, rad_y_values, k=k)  # Use cubic spline (adjust k as needed)
-                rad_ynew = rad_spl(rad_xnew)
-                # Plot the smoothed raderature curve
-                ax4.plot(rad_xnew, rad_ynew, color=ecv_label_color, label=ecv_label) 
+            if ecv_smoothing == True:   
+               # Smooth the extra climatic variable data
+                ecv_x_values = np.arange(len(merged_df))
+                ecv_y_values = merged_df[ecv_value]
+                ecv_xnew = np.linspace(ecv_x_values.min(), ecv_x_values.max(), x_points)  # Create a smoother x-axis
+                ecv_spl = make_interp_spline(ecv_x_values, ecv_y_values, k=k)  # Use cubic spline (adjust k as needed)
+                ecv_ynew = ecv_spl(ecv_xnew)
+                # Plot the smoothed ecv curve
+                ax4.plot(ecv_xnew, ecv_ynew, color=ecv_label_color, label=ecv_label) 
             else:    
                 ax4.plot(range(len(merged_df)), merged_df[ecv_value], color=ecv_label_color, label=ecv_label)
 
-            if fix_rad_ylim == True:
-                ax4.set_ylim(min_rad_ylim, max_rad_ylim)
+            if fix_ecv_ylim == True:
+                ax4.set_ylim(min_ecv_ylim, max_ecv_ylim)
             else:
                  ax4.set_ylim(0, max(merged_df[ecv_value]) + 20)  # Adjust the urader limit as needed
             
