@@ -1,11 +1,17 @@
 # Dictionaries for valid values
 
-time_freq_options = {
+'''time_freq_options = {
     "2 H": "Every 2 hours",
     "6 H": "Every 6 hours",
     "12 H": "Every 12 hours",
     "24 H": "Every 24 hours",
     "48 H": "Every 48 hours"
+}'''
+
+time_division_options = {
+    "timespan": "select time start and end period",
+    "2 parts": "divide into two equal parts",
+    "weeks": "divide into 3 weeks"
 }
 
 mainVariable_options = {
@@ -85,4 +91,21 @@ extra_filter_options = {
         "Site 2": "Site 2 location"
     }
 }
+
+boolean_variables = [
+    "clima",
+    "temperature",
+    "temp_smoothing",
+    "wind_speed",
+    "wind_smoothing",
+    "extra_clim_variable",
+    "ecv_smoothing",
+    "precipitation",
+    "result_tables",
+    "create_chart",
+    "save_chart",
+    "display_chart",
+    "plot_title",
+    "emend_id"
+]
 

@@ -1,4 +1,8 @@
+import sys
 import os
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+print(parent_dir)
+sys.path.append(parent_dir)
 import pandas as pd
 import glob
 
@@ -7,11 +11,14 @@ import glob
 # "id_faird.xlsx" provides the data necessary to generate the desired charts by running "chart_taxon_ambient_clim.py"
 
 # Specify the path where your Excel files are located
-HOME = os.path.dirname(__file__)
-path = "original_tables"
+HOME = os.path.dirname(os.path.abspath(__file__))
+
+print(HOME)
+
+path = "/original_tables"
 
 # Get a list of all Excel files in the specified path
-file_list = glob.glob(path + "/*.xlsx")
+file_list = glob.glob(parent_dir + path + "/*.xlsx")
 
 # Initialize an empty list to store DataFrames
 dfs = []
@@ -31,6 +38,6 @@ merged_df = merged_df[merged_df["Class"] == "Insecta"]
 merged_df["ID"] = range(1, len(merged_df) + 1)
 
 # Save the merged DataFrame to a new Excel file
-merged_df.to_excel("source_tables/id_faird.xlsx",  sheet_name="Results", index=False)
+merged_df.to_excel(parent_dir + "/source_tables/id_faird2.xlsx",  sheet_name="Results", index=False)
 
-print("Merged data saved to source_tables/id_faird.xlsx")
+print(f"Merged data saved to {parent_dir}\source_tables\id_faird.xlsx")

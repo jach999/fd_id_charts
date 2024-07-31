@@ -1,8 +1,8 @@
 import pandas as pd
 
-def insect_data_process(start_datetime, end_datetime, minute_start, hour_start, hour_end, taxon, taxon_level, mainVariable, subVariable, device_type, extra_filter, extra_subfilter, All, time_freq, timespan=True, emend_id=False, relative_values=False):
+def insect_data_process(parent_dir, start_datetime, end_datetime, minute_start, hour_start, hour_end, taxon, taxon_level, mainVariable, subVariable, device_type, extra_filter, extra_subfilter, All, time_freq, emend_id, relative_values):
     # Read the source folders
-    insect_data = pd.read_excel("source_tables/id_faird.xlsx", sheet_name="Results", header=0, decimal=",")
+    insect_data = pd.read_excel(parent_dir + "/source_tables/id_faird.xlsx", sheet_name="Results", header=0, decimal=",")
 
     # Convert "Checkin" and "Time" columns to datetime
     insect_data["DateTime"] = pd.to_datetime(insect_data["Checkin"], format='%d.%m.%Y %H:%M', errors="coerce")
@@ -15,11 +15,8 @@ def insect_data_process(start_datetime, end_datetime, minute_start, hour_start, 
     insect_data = insect_data.sort_values(by="DateTime")
 
     # Filter by time window (timespan)
-    if timespan:
-        insect_data_timespan = insect_data[(insect_data['DateTime'] >= start_datetime) & (insect_data['DateTime'] <= end_datetime)]
-    else:
-        insect_data_timespan = insect_data
-
+    insect_data_timespan = insect_data[(insect_data['DateTime'] >= start_datetime) & (insect_data['DateTime'] <= end_datetime)]
+   
     # Delete data between hour_start and hour_end
     insect_data_timespan['Hour'] = insect_data_timespan['DateTime'].dt.hour
     insect_data_timespan = insect_data_timespan[(insect_data_timespan ['Hour'] >= hour_start) & (insect_data_timespan['Hour'] <= hour_end)]

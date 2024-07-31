@@ -1,12 +1,10 @@
-
 import pandas as pd
-from chart_config import * # Configuration variables
 
-def clim_data_process(start_datetime, end_datetime, minute_start, hours, timespan=True):
+def clim_data_process(parent_dir, time_freq, start_datetime, end_datetime, minute_start, hours, hour_start, hour_end):
     # Read the source folders
-    clim_data = pd.read_excel("source_tables/clim_data.xlsx", sheet_name="ClimData", header=0, decimal=",")
+    clim_data = pd.read_excel(parent_dir + "/source_tables/clim_data.xlsx", sheet_name="ClimData", header=0, decimal=",")
 
-    # Convert "Checkin" and "Time" columns to datetime
+    # Convert "Time" column to datetime
     clim_data["DateTime"] = pd.to_datetime(clim_data["Time"], format='%d.%m.%Y %H:%M', errors="coerce")
 
     # Convert in clim_data any non-numeric value into numeric 
@@ -15,12 +13,9 @@ def clim_data_process(start_datetime, end_datetime, minute_start, hours, timespa
     # Replace NaN values with zeros
     clim_data.fillna(0, inplace=True)
 
-    # Filter by time window (timespan)
-    if timespan:
-        clim_data_timespan = clim_data[(clim_data['DateTime'] >= start_datetime) & (clim_data['DateTime'] <= end_datetime)]
-    else:
-        clim_data_timespan = clim_data
-
+    # Filter by time window
+    clim_data_timespan = clim_data[(clim_data['DateTime'] >= start_datetime) & (clim_data['DateTime'] <= end_datetime)].copy()
+   
     # Delete data between hour_start and hour_end
     clim_data_timespan['Hour'] = clim_data_timespan['DateTime'].dt.hour
     clim_data_timespan = clim_data_timespan[(clim_data_timespan ['Hour'] >= hour_start) & (clim_data_timespan['Hour'] <= hour_end)]
@@ -42,5 +37,9 @@ def clim_data_process(start_datetime, end_datetime, minute_start, hours, timespa
         dfg_clim['Hour'] = dfg_clim['DateTime'].dt.hour
         dfg_clim = dfg_clim[(dfg_clim ['Hour'] >= hour_start) & (dfg_clim['Hour'] <= hour_end)]
         dfg_clim.drop('Hour', axis=1, inplace=True)
+
+    # Reorder columns to set 'DateTime' as the first column
+    cols = ['DateTime'] + [col for col in dfg_clim.columns if col != 'DateTime']
+    dfg_clim = dfg_clim[cols]
     
     return dfg_clim

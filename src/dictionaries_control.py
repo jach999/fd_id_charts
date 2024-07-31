@@ -54,7 +54,7 @@ wind_speed = get_valid_boolean_input("wind_speed")
 wind_smoothing = get_valid_boolean_input("wind_smoothing")
 radiation = get_valid_boolean_input("radiation")
 rad_smoothing = get_valid_boolean_input("rad_smoothing")
-precipitation = get_valid_boolean_input("precipitation")'''
+precipitation = get_valid_boolean_input("precipitation")
 
 from chart_config import *
 from src.dictionaries import *
@@ -152,6 +152,103 @@ else:
     if extra_subfilter == All:
         print ("Invalid extra subfilter: All is not acceped, you must specify a valid option")
     else:
-        print("Invalid extra subfilter: Please choose a valid option.")
+        print("Invalid extra subfilter: Please choose a valid option.")'''
 
+from src.dictionaries import *
+import inspect
+
+# Validate mainVariable
+def validate_time_division(time_division):
+    if time_division in time_division_options:
+        print(f"Selected time division: {time_division}")
+        return True
+    else:
+        print("\033[91m" + "Invalid time division type. Please choose a valid option." + "\033[0m")
+        return False
+
+
+# Validate mainVariable
+def validate_mainVariable(mainVariable):
+    if mainVariable in mainVariable_options:
+        print(f"Selected main variable: {mainVariable}")
+        return True
+    else:
+        print("\033[91m" + "Invalid main variable. Please choose a valid option." + "\033[0m")
+        return False
+
+# Validate subVariable
+def validate_subVariable(mainVariable, subVariable):
+    if subVariable in mainVariable_options.get(mainVariable, {}):
+        print(f"Selected sub-variable: {subVariable}")
+        return True
+    else:
+        print("\033[91m" + "Invalid sub-variable. Please choose a valid option." + "\033[0m")
+        return False
+
+# Validate device_type
+def validate_device_type(device_type):
+    if device_type in device_type_options:
+        print(f"Selected device type: {device_type}")
+        return True
+    else:
+        print("\033[91m" + "Invalid device type. Please choose a valid option." + "\033[0m")
+        return False
+
+# Validate taxon_level
+def validate_taxon_level(taxon_level):
+    if taxon_level in taxon_level_options:
+        print(f"Selected taxon level: {taxon_level}")
+        return True
+    else:
+        print("\033[91m" + "Invalid taxon level. Please choose a valid option." + "\033[0m")
+        return False
+
+# Validate extra_filter
+def validate_extra_filter(extra_filter):
+    if extra_filter in extra_filter_options or extra_filter is None:
+        print(f"Selected extra filter: {extra_filter}")
+        return True
+    else:
+        print("\033[91m" + "Invalid extra filter. Please choose a valid option." + "\033[0m")
+        return False
+
+# Validate extra_subfilter
+def validate_extra_subfilter(extra_filter, extra_subfilter):
+    if extra_filter is None:
+        print("Selected extra subfilter: None")
+        return True  # Any value is valid when extra_filter is None
+    elif extra_subfilter in extra_filter_options.get(extra_filter, {}):
+        print(f"Selected extra subfilter: {extra_subfilter}")
+        return True
+    else:
+        if extra_subfilter == All:
+            print ("\033[91m" + "Invalid extra subfilter: All is not accepted, you must specify a valid option" + "\033[0m")
+        else:
+            print("\033[91m" + "Invalid extra subfilter: Please choose a valid option." + "\033[0m")
+        return False
+
+'''def validate_boolean_variables(boolean_variables):
+
+    for var_name in boolean_variables:
+        var_value = globals().get(var_name)
+        if not isinstance(var_value, bool):
+            print(f"Error: {var_name} is not a boolean variable.")
+            return False
+
+    print("All boolean variables are valid.")
+    return True'''
+
+        
+def validate_boolean_variables(boolean_variables):
+    # Get the caller's global variables
+    caller_globals = inspect.stack()[1][0].f_globals
+
+    for var_name in boolean_variables:
+        var_value = caller_globals.get(var_name)
+        if not isinstance(var_value, bool):
+            print(f"\033[91m" + "Error: {var_name} is not a boolean variable." + "\033[0m")
+            return False
+
+    print("\033[92m" + "All boolean variables are valid." + "\033[0m")
+    return True
 

@@ -10,26 +10,70 @@ from src.variables_handling import generate_time_variables, handle_strings
 from src.insect_data_processing import insect_data_process
 from src.clim_data_processing import clim_data_process
 from src.labels import ecv_value_label, ecv_value_label_color, custom_colors
+#from src.var_checker import variables_checker
 from matplotlib.ticker import ScalarFormatter
 
 # Load data
 HOME = os.path.dirname(__file__)
+parent_dir= HOME
+
+#print(extra_filter)
+#print(mainVariable)
+
+print()
+print("##### Data settings #####")
+print("-------------------------")
+def main():
+    # Call the variables_checker function
+    # Validate each variable
+    if not validate_time_division(time_division):
+        return
+    if not validate_mainVariable(mainVariable):
+        return
+    if not validate_subVariable(mainVariable, subVariable):
+        return
+    if not validate_device_type(device_type):
+        return
+    if not validate_taxon_level(taxon_level):
+        return
+    if not validate_extra_filter(extra_filter):
+        return
+    if not validate_extra_subfilter(extra_filter, extra_subfilter):
+        return
+    
+    # Validate boolean variables
+    if not validate_boolean_variables(boolean_variables):
+        return
+ 
+    print("\033[92m" + "All variables are valid." + "\033[0m")
+
+if __name__ == "__main__":
+    main()
+
 
 # Generate time variables
-hours, minute_start, start_datetime, end_datetime = generate_time_variables(timespan, time_freq, hour_start, hour_end, "2023-08-23", "2023-09-01")
-
+hours, minute_start, start_datetime, end_datetime, timedelta = generate_time_variables(time_division, time_freq, hour_start, hour_end, time_start, time_end, part_nr, week_nr)
 # Generate strings
-folder_result_name, file_result_name, plt_title, taxon, folder_sufix, file_sufix = handle_strings(clima, taxon, mainVariable, subVariable, device_type, time_freq, folder_sufix, file_sufix, taxon_level, extra_filter, extra_subfilter, All)
+folder_result_name, file_result_name, plt_title, taxon, folder_sufix, file_sufix, time_sufix = handle_strings(clima, taxon, device_type, time_freq, folder_sufix, file_sufix, taxon_level, extra_filter, extra_subfilter, All, emend_id, time_division, timedelta, part_nr, week_nr, mainVariable, subVariable)
+
+print()
+print("##### Time settings #####")
+print("-------------------------")
+print(time_sufix.replace("_", " ").strip() + ":")
+print("Time start: "+ str(start_datetime))
+print("Time end: "+ str(end_datetime))
+print("Timedelta: " + str(timedelta))
+print()
+print("Data saved in: " + "\033[94m" "/results/charts/"+ folder_result_name + "\033[0m")
+print()
 
 # Create the folder if it doesn't exist
-if not os.path.exists("results/" + folder_result_name):
-    os.makedirs("results/" + folder_result_name, 0o777)
-
-print("Data saved in: /results/"+ folder_result_name)
+if not os.path.exists("results/charts/" + folder_result_name):
+    os.makedirs("results/charts/" + folder_result_name, 0o777)
 
 # Process insect data and clima data functions
-dfp_filter_factor, dfg_filter_factor = insect_data_process(start_datetime, end_datetime, minute_start, hour_start, hour_end, taxon, taxon_level, mainVariable, subVariable, device_type, extra_filter, extra_subfilter, All, time_freq, timespan, emend_id, relative_values)
-dfg_clim = clim_data_process(start_datetime, end_datetime, minute_start, hours, timespan)
+dfp_filter_factor, dfg_filter_factor = insect_data_process(parent_dir, start_datetime, end_datetime, minute_start, hour_start, hour_end, taxon, taxon_level, mainVariable, subVariable, device_type, extra_filter, extra_subfilter, All, time_freq, emend_id, relative_values)
+dfg_clim = clim_data_process(parent_dir, time_freq, start_datetime, end_datetime, minute_start, hours, hour_start, hour_end)
    
 # merge_filter_factor and climatic tables
 merged_df =  pd.merge(dfp_filter_factor, dfg_clim, on="DateTime", how="outer")
@@ -60,20 +104,20 @@ ax1_merged_df = ax1_merged_df.sort_index(axis=1)
 
 
 if result_tables == True:
-    #insect_data.to_csv("results/" + folder_result_name + '/insect_data.csv', index=False)
-    #clim_data.to_csv("results/" + folder_result_name + '/clim_data.csv', index=False)
+    #insect_data.to_csv("results/charts/" + folder_result_name + '/insect_data.csv', index=False)
+    dfg_clim.to_csv("results/charts/" + folder_result_name + '/clim_data.csv', index=False)
     # Save the date and filter_factor group table to a CSV file
-    dfg_filter_factor.to_csv("results/" + folder_result_name + "/" + file_result_name + '_filter_factors_group_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
+    dfg_filter_factor.to_csv("results/charts/" + folder_result_name + "/" + file_result_name + '_filter_factors_group_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
     # Save the filter_factor pivot table to a CSV file
-    #dfp_filter_factor.to_csv("results/" + folder_result_name + "/" + file_result_name +  '_filter_factor_count_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
+    #dfp_filter_factor.to_csv("results/charts/" + folder_result_name + "/" + file_result_name +  '_filter_factor_count_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
     # Save merged_data to a CSV file (adjust the file path as needed)
-    #insect_data_filtered.to_csv("results/" + folder_result_name +  "/" + file_result_name + '_insect_data_filtered.csv', index=False)
+    #insect_data_filtered.to_csv("results/charts/" + folder_result_name +  "/" + file_result_name + '_insect_data_filtered.csv', index=False)
     # Save the date and cimatic group table to a CSV file
-    #dfg_clim.to_csv("results/" + folder_result_name + "/" + file_result_name +  '_dfg_clim_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
+    #dfg_clim.to_csv("results/charts/" + folder_result_name + "/" + file_result_name +  '_dfg_clim_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
     # Save the merged table to a CSV file
-    merged_df.to_csv("results/" + folder_result_name + "/" + file_result_name +  '_result_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
+    merged_df.to_csv("results/charts/" + folder_result_name + "/" + file_result_name +  '_result_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
     # Save the ax1_merged table to a CSV file
-    #ax1_merged_df.to_csv("results/" + folder_result_name + "/" + file_result_name +  '_ax1_merged_df_table.csv', index=True)
+    #ax1_merged_df.to_csv("results/charts/" + folder_result_name + "/" + file_result_name +  '_ax1_merged_df_table.csv', index=True)
     
 
 if create_chart == True:
@@ -275,6 +319,6 @@ if create_chart == True:
 
     #plt.tight_layout()
     if save_chart == True:
-        plt.savefig("results/" + folder_result_name + "/" + file_result_name + ".png", bbox_inches="tight")
+        plt.savefig("results/charts/" + folder_result_name + "/" + file_result_name + ".png", bbox_inches="tight")
     if display_chart == True:
         plt.show()
