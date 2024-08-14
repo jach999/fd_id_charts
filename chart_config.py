@@ -6,15 +6,15 @@ All = "All"
 #-------------------------#
 
 # Modify these factors to display different info in the charts
-mainVariable = "Device x Ambient" # "Device_type", "Device", "Ambient", "Site", and "Devixe x Ambient"
-subVariable = All #  Set to All to show all. In "Device_type": FAIR-D or "ID"; in "Device": FAIR-D1 -D2, -D3, or -D4, ID1, ID2, ID4; in "Ambient": "Maize Field" or "Meadow"; in "Site": "Site 1", "Site 2", "Site 3", "Site 4"; in "Device x Ambient": “FAIR-D - Maize Field”, “FAIR-D - Meadow”, “ID - Maize Field”, “ID - Meadow”
-device_type = "FAIR-D" # Set to All to show all devices, or choose between "FAIR-D" or "ID"
+mainVariable = "DevicexAmbient" # "Device_type", "Device", "Ambient", "Site", and "DevixexAmbient"
+subVariable = All #  Set to All to show all. In "Device_type": FAIR-D or "ID"; in "Device": FAIRD1, -D2, -D3, or -D4, ID1, -2, or -4; in "Ambient": "Maize" or "Meadow"; in "Site": "Site1", "Site2", "Site3", "Site4"; in "DevicexAmbient": “FAIRDxMaize”, “FAIRDxMeadow”, “IDxMaize”, “IDxMeadow”
+device_type = "FAIRD" # Set to All to show all devices, or choose between "FAIRD" or "ID"
 taxon_level = "Class" # "Class", "Order", "Suborder", "Family", "Subfamily", "Genus"
 taxon = "Insecta" # Acording the selected taxon_level, the desired taxon. If more than one is wanted:["taxon1","taxon2", ...] - Example for taxon_level = "Order": ["Diptera", "Coleoptera", "Hymenoptera"] 
 
 # Additional filter
 extra_filter = None # None for not adding an additional filter. Same settings as in "mainVariable"
-extra_subfilter = "Site 1" # Same settings as in "subvariable". If extra_filter = None, extra_subfilter does nothing.
+extra_subfilter = "Site1" # Same settings as in "subvariable". If extra_filter = None, extra_subfilter does nothing.
 
 
 #-------------------------#
@@ -25,7 +25,7 @@ time_freq = "3 H" # The values ​​should be multiples or divisors of 24 hours
 time_division = "weeks" # Select the time division mode. "timespan": to activate time_start and time_end; "2 parts": to activate part_nr; "weeks": to activate week_nr. None to cover the entire time of the data.
 time_start, time_end = ["2023-08-23",  "2023-09-12"] # When time_division = "timespan" - Format: "YYYY-MM-DD"
 part_nr = 2 # When: time_division = "2 parts" - 1 or 2, 11 days each part
-week_nr = 2 # When time_division = "weeks" - 1, 2 or 3
+week_nr = 1 # When time_division = "weeks" - 1, 2 or 3
 hour_start, hour_end = [7, 18] # Daily start and end hours
 
 
@@ -53,7 +53,7 @@ min_wind_ylim, max_wind_ylim = [0, 14]
 precipitation, fix_pp_ylim = [True, True] 
 min_pp_ylim, max_pp_ylim = [0, 15]
 
-extra_clim_variable, ecv_value, ecv_smoothing, fix_ecv_ylim = [False, "RAD", True, True] # extra_clim_variable,: True for activating an extra climatic variable. ecv_value: "RAD" for displaying "Solar Radiation", "RH" for "Relative Humidity","GROUNDTEMP" for "Ground Temperature", and "AIRP" for "Air Pressure"
+extra_clim_variable, ecv_value, ecv_smoothing, fix_ecv_ylim = [False, "GROUNDTEMP", True, False] # extra_clim_variable,: True for activating an extra climatic variable. ecv_value: "RAD" for displaying "Solar Radiation", "RH" for "Relative Humidity","GROUNDTEMP" for "Ground Temperature", and "AIRP" for "Air Pressure"
 min_ecv_ylim, max_ecv_ylim = [900, 1050]
 
 # Smoothing settings
@@ -65,10 +65,10 @@ k = 2 # Smoothing factor
 #     Results managing     #
 #--------------------------#
 
-result_tables = False # Saves the interim result tables in the result/ folder
+result_tables = True # Saves the interim result tables in the result/ folder
 create_chart = True # Activates the save_chart and display_chart options
 save_chart = True # Save chart .png file in the result/ folder
-display_chart = False # Display the generated chart in a new window
+display_chart = True # Display the generated chart in a new window
 folder_sufix = None # Add an extra folder sufix to the results data folder and chart name. None to deactivate
 file_sufix = None # Add an extra file sufix to the results data folder and chart name. None to deactivate
 

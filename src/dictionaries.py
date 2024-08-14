@@ -16,44 +16,56 @@ time_division_options = {
 
 mainVariable_options = {
     "Ambient": {
-        "All": "Show all subvariables",
-        "Maize Field": "Maize field conditions",
+        "All": "Maize Field and Meadow",
+        "Maize": "Maize Field conditions",
         "Meadow": "Meadow conditions"
     },
     "Device_type": {
-        "All": "Show all subvariables",
-        "FAIR-D": "FAIR-D devices",
-        "ID": "ID devices"
+        "All": "FAIR-Device and Insect Detect",
+        "FAIRD": "FAIR-Device",
+        "ID": "Insect Detect"
     },
     "Device": {
-        "All": "Show all subvariables",
-        "FAIR-D1": "FAIR-Device 1",
-        "FAIR-D2": "FAIR-Device 2",
-        "FAIR-D3": "FAIR-Device 3",
-        "FAIR-D4": "FAIR-Device 4",
-        "ID-1": "Insect Detect 1",
-        "ID-2": "Insect Detect 2",
-        "ID-3": "Insect Detect 3",
-        "ID-4": "Insect Detect 4"
+        "All": "FAIR-Device 1, 2, 3, and 4 Insect Detect 1, 2, and 4",
+        "FAIRD1": "FAIR-Device 1",
+        "FAIRD2": "FAIR-Device 2",
+        "FAIRD3": "FAIR-Device 3",
+        "FAIRD4": "FAIR-Device 4",
+        "ID1": "Insect Detect 1",
+        "ID2": "Insect Detect 2",
+        "ID3": "Insect Detect 3",
+        "ID4": "Insect Detect 4"
     },
     "Site": {
-        "All": "Show all subvariables",
-        "Site 1": "Site 1 location",
-        "Site 2": "Site 2 location"
+        "All": "All Sites",
+        "Site1": "Site 1",
+        "Site2": "Site 2",
+        "Site3": "Site 3",
+        "Site4": "Site 4"
     },
-    "Device x Ambient": {
-        "All": "Show all subvariables",
-        "FAIR-D - Maize Field": "FAIR-D in Maize Field",
-        "FAIR-D - Meadow": "FAIR-D in Meadow",
-        "ID - Maize Field": "ID in Maize Field",
-        "ID - Meadow": "ID in Meadow"
+    "DevicexAmbient": {
+        "All": "Device Type in Maize Field and Meadow",
+        "FAIRDxMaize": "FAIR-D in Maize Field",
+        "FAIRDxMeadow": "FAIR-D in Meadow",
+        "IDxMaize": "Insect Detect in Maize Field",
+        "IDxMeadow": "Insect Detect in Meadow"
     }
 
 }
 
+
+mainVariable_description = {
+    "Ambient": "Ambient",
+    "Device_type": "Device Type",
+    "Device": "Device",
+    "Site": "Site",
+    "DevicexAmbient": "Device in Ambient"
+}
+
+
 device_type_options = {
     "All": "Show all devices",
-    "FAIR-D": "FAIR-D devices only",
+    "FAIRD": "FAIR-D devices only",
     "ID": "ID devices only"
 }
 
@@ -69,26 +81,28 @@ taxon_level_options = {
 
 extra_filter_options = {
     "Ambient": {
-        "Maize Field": "Maize field conditions",
+        "Maize": "Maize field conditions",
         "Meadow": "Meadow conditions"
     },
     "Device_type": {
-        "FAIR-D": "FAIR-D devices",
+        "FAIRD": "FAIR-D devices",
         "ID": "ID devices"
     },
     "Device": {
-        "FAIR-D1": "FAIR-Device 1",
-        "FAIR-D2": "FAIR-Device 2",
-        "FAIR-D3": "FAIR-Device 3",
-        "FAIR-D4": "FAIR-Device 4",
-        "ID-1": "Insect Detect 1",
-        "ID-2": "Insect Detect 2",
-        "ID-3": "Insect Detect 3",
-        "ID-4": "Insect Detect 4"
+        "FAIRD1": "FAIR-Device 1",
+        "FAIRD2": "FAIR-Device 2",
+        "FAIRD3": "FAIR-Device 3",
+        "FAIRD4": "FAIR-Device 4",
+        "ID1": "Insect Detect 1",
+        "ID2": "Insect Detect 2",
+        "ID3": "Insect Detect 3",
+        "ID4": "Insect Detect 4"
     },
     "Site": {
-        "Site 1": "Site 1 location",
-        "Site 2": "Site 2 location"
+        "Site1": "Site 1",
+        "Site2": "Site 2",
+        "Site3": "Site 3",
+        "Site4": "Site 4"
     }
 }
 
@@ -109,3 +123,10 @@ boolean_variables = [
     "emend_id"
 ]
 
+
+# Example usage
+variable = mainVariable_options
+category = "Ambient"
+subkey = "Maize"
+test = variable[category][subkey]
+print(test)

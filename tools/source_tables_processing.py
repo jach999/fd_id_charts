@@ -38,6 +38,6 @@ merged_df = merged_df[merged_df["Class"] == "Insecta"]
 merged_df["ID"] = range(1, len(merged_df) + 1)
 
 # Save the merged DataFrame to a new Excel file
-merged_df.to_excel(parent_dir + "/source_tables/id_faird2.xlsx",  sheet_name="Results", index=False)
+merged_df.to_excel(parent_dir + "/source_tables/id_faird.xlsx",  sheet_name="Results", index=False)
 
-print(f"Merged data saved to {parent_dir}\source_tables\id_faird.xlsx")
+print("Merged data saved to: "  + "\033[94m" +  f"{parent_dir}\source_tables\id_faird.xlsx"  + "\033[0m")

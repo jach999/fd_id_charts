@@ -20,7 +20,7 @@ def clim_data_process(parent_dir, time_freq, start_datetime, end_datetime, minut
     clim_data_timespan['Hour'] = clim_data_timespan['DateTime'].dt.hour
     clim_data_timespan = clim_data_timespan[(clim_data_timespan ['Hour'] >= hour_start) & (clim_data_timespan['Hour'] <= hour_end)]
     clim_data_timespan.drop('Hour', axis=1, inplace=True)
-
+  
     # Group by date (in a given time_freq) and by climatic variables
     dfg_clim = clim_data_timespan.groupby(pd.Grouper(key="DateTime", freq= time_freq, offset=f"{minute_start}T")).agg({
         "AIRTEMP": "mean",

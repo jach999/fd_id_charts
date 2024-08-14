@@ -46,7 +46,9 @@ if __name__ == "__main__":
 # Generate time variables
 hours, minute_start, start_datetime, end_datetime, timedelta = generate_time_variables(time_division, time_freq, hour_start, hour_end, time_start, time_end, part_nr, week_nr)
 # Generate strings
-folder_result_name, file_result_name, plt_title, taxon, folder_sufix, file_sufix, time_sufix = handle_strings(clima, taxon, device_type, time_freq, folder_sufix, file_sufix, taxon_level, extra_filter, extra_subfilter, All, emend_id, time_division, timedelta, part_nr, week_nr)
+folder_result_name, file_result_name, plt_title, taxon, folder_sufix, file_sufix, time_sufix, time_freq_sufix = handle_strings(clima, taxon, device_type, time_freq, folder_sufix, file_sufix, taxon_level, extra_filter, extra_subfilter, All, emend_id, time_division, timedelta, part_nr, week_nr)
+
+grouped_table_name = str('fd_id_' + time_freq_sufix + file_sufix + '.csv')
 
 print()
 print("##### Time settings #####")
@@ -56,7 +58,7 @@ print("Time start: "+ str(start_datetime))
 print("Time end: "+ str(end_datetime))
 print("Timedelta: " + str(timedelta))
 print()
-print("Data saved in: " + "\033[94m" + HOME + "\\results\\grouped_tables\\" + folder_result_name + "\033[0m")
+print("Data saved as: " + "\033[94m" + HOME + "\\results\\grouped_tables\\" + folder_result_name + "\\" + grouped_table_name + "\033[0m")
 print()
 
 # Create the folder if it doesn't exist
@@ -91,10 +93,10 @@ if week_column:
     merged_df['Week'] = ((merged_df.index - merged_df.index[0]).days // 7) + 1
 
 
-merged_df.to_csv("results/grouped_tables/" + folder_result_name + "/" + 'fd_id_' + time_freq.replace(' ', '') + file_sufix + '.csv', index=True)  # Set index=True to include row labels (index) in the CSV
+merged_df.to_csv(HOME + "\\results\\grouped_tables\\" + folder_result_name + "\\" + grouped_table_name, index=True)  # Set index=True to include row labels (index) in the CSV
 
 if stat_save == True:
-    merged_df.to_csv(grandparent_dir + "/stat/source_tables/" + 'fd_id_' + time_freq.replace(' ', '') + file_sufix + '.csv', index=True) 
+    merged_df.to_csv(grandparent_dir + "/stat/source_tables/" + grouped_table_name, index=True) 
 
 if interim_result_tables:
     dfg_insect.to_csv("results/grouped_tables/" + folder_result_name + "/" + file_result_name + '_dfg_insect.csv', index=True)  # Set index=True to include row labels (index) in the CSV

@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import make_interp_spline
 from chart_config import * # Configuration variables
+from src.dictionaries import *
 from src.dictionaries_control import *
 from src.variables_handling import generate_time_variables, handle_strings
 from src.insect_data_processing import insect_data_process
@@ -54,7 +55,7 @@ if __name__ == "__main__":
 # Generate time variables
 hours, minute_start, start_datetime, end_datetime, timedelta = generate_time_variables(time_division, time_freq, hour_start, hour_end, time_start, time_end, part_nr, week_nr)
 # Generate strings
-folder_result_name, file_result_name, plt_title, taxon, folder_sufix, file_sufix, time_sufix = handle_strings(clima, taxon, device_type, time_freq, folder_sufix, file_sufix, taxon_level, extra_filter, extra_subfilter, All, emend_id, time_division, timedelta, part_nr, week_nr, mainVariable, subVariable)
+folder_result_name, file_result_name, plt_title, taxon, folder_sufix, file_sufix, time_sufix, time_freq_sufix = handle_strings(clima, taxon, device_type, time_freq, folder_sufix, file_sufix, taxon_level, extra_filter, extra_subfilter, All, emend_id, time_division, timedelta, part_nr, week_nr, mainVariable, subVariable, mainVariable_options, mainVariable_description)
 
 print()
 print("##### Time settings #####")
@@ -64,7 +65,7 @@ print("Time start: "+ str(start_datetime))
 print("Time end: "+ str(end_datetime))
 print("Timedelta: " + str(timedelta))
 print()
-print("Data saved in: " + "\033[94m" "/results/charts/"+ folder_result_name + "\033[0m")
+print("Data saved in: " + "\033[94m" + "/results/charts/"+ folder_result_name + "\033[0m")
 print()
 
 # Create the folder if it doesn't exist
@@ -87,21 +88,32 @@ merged_df.sort_values(by="DateTime", inplace=True)
 # Set the index to the "DateTime" column
 merged_df.set_index("DateTime", inplace=True)
 
-unique_main_variables = dfg_filter_factor[mainVariable].unique()
+# Get unique main variables and sort them so that label colors are assigned consistently
+unique_main_variables = sorted(dfg_filter_factor[mainVariable].unique())
 
 # Create an empty DataFrame for the ax1 table
 ax1_merged_df = pd.DataFrame()
 
+# Create a dictionary for renaming columns
+rename_dict = {}
+
 # Loop through each unique main variable
 for var in unique_main_variables:
+    # Extract the variables descriptions
+    description = mainVariable_options[mainVariable][var]
     # Extract the corresponding column from merged_df
     column_data = merged_df[var]
     # Assign it to the new DataFrame with the desired column name
     ax1_merged_df[var] = column_data
+    # Add to rename dictionary
+    rename_dict[var] = description
 
-    # Sort the column names alphabetically so that label colors are assigned consistently
+# Rename the columns using the description mapping
+ax1_merged_df.rename(columns=rename_dict, inplace=True)
+
+
+# Sort the column names alphabetically so that label colors are assigned consistently
 ax1_merged_df = ax1_merged_df.sort_index(axis=1)
-
 
 if result_tables == True:
     #insect_data.to_csv("results/charts/" + folder_result_name + '/insect_data.csv', index=False)
@@ -117,9 +129,8 @@ if result_tables == True:
     # Save the merged table to a CSV file
     merged_df.to_csv("results/charts/" + folder_result_name + "/" + file_result_name +  '_result_table.csv', index=True)  # Set index=True to include row labels (index) in the CSV
     # Save the ax1_merged table to a CSV file
-    #ax1_merged_df.to_csv("results/charts/" + folder_result_name + "/" + file_result_name +  '_ax1_merged_df_table.csv', index=True)
+    ax1_merged_df.to_csv("results/charts/" + folder_result_name + "/" + file_result_name +  '_ax1_merged_df_table.csv', index=True)
     
-
 if create_chart == True:
     colors = [custom_colors.get(var, 'magenta') for var in unique_main_variables]
   

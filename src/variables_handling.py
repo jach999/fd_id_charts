@@ -17,7 +17,7 @@ def generate_time_variables(time_division, time_freq, hour_start, hour_end, time
     elif time_division== "weeks":
         if week_nr == 1:
             time_start = "2023-08-23"
-            time_end = "2023-09-29"
+            time_end = "2023-08-29"
         elif week_nr == 2:
             time_start = "2023-08-30"
             time_end = "2023-09-05"
@@ -41,10 +41,19 @@ def generate_time_variables(time_division, time_freq, hour_start, hour_end, time
     return hours, minute_start, start_datetime, end_datetime, timedelta
 
 
-def handle_strings(clima, taxon, device_type, time_freq, folder_sufix, file_sufix, taxon_level, extra_filter, extra_subfilter, All, emend_id, time_division, timedelta, part_nr, week_nr, mainVariable=None, subVariable=None):
+def handle_strings(clima, taxon, device_type, time_freq, folder_sufix, file_sufix, taxon_level, extra_filter, extra_subfilter, All, emend_id, time_division, timedelta, part_nr, week_nr, mainVariable=None, subVariable=None, mainVariable_options=None, mainVariable_description=None):
 
     mainVariable = mainVariable if mainVariable else ""
     subVariable = subVariable if subVariable else ""
+    mainVariable_options = mainVariable_options if mainVariable_options else ""
+    mainVariable_description = mainVariable_description if mainVariable_description else ""
+
+    if mainVariable != "":
+        mainVariable_string = mainVariable_description[mainVariable]
+        subVariable_string = mainVariable_options[mainVariable][subVariable]
+    else:
+        mainVariable_string = ""
+        subVariable_string = ""  
 
 
     if folder_sufix != None:
@@ -52,6 +61,8 @@ def handle_strings(clima, taxon, device_type, time_freq, folder_sufix, file_sufi
     else:
         folder_sufix = ""
 
+    time_freq_sufix = time_freq.replace(' ', '') 
+    
     if time_division != None:
         if time_division == "timespan":
             time_sufix = "_" + str(timedelta) + "_days"
@@ -92,20 +103,20 @@ def handle_strings(clima, taxon, device_type, time_freq, folder_sufix, file_sufi
         if extra_filter != None:
             folder_result_name = f"{'_'.join(taxon)}_{mainVariable.replace(' ', '_')}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{extra_subfilter.replace(' ', '_')}_Clima_{time_freq.replace(' ', '')}{folder_sufix}" 
             file_result_name = f"{'_'.join(taxon)}_{mainVariable.replace(' ', '_')}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{extra_subfilter.replace(' ', '_')}_Clima_{time_freq.replace(' ', '')}{file_sufix}"
-            plt_title = (taxon_chart_title + " " + taxon_level + " count by " + mainVariable.replace("_", " ") + " (" + subVariable + ")" + " and by " +  extra_filter + " (" + extra_subfilter + ")" + " with Climatic Conditions")
+            plt_title = (taxon_chart_title + " " + taxon_level + " count by " + mainVariable_string + " (" + subVariable_string + ")" + " and by " +  extra_filter + " (" + extra_subfilter + ")" + " with Climatic Conditions")
         else:
             folder_result_name = f"{'_'.join(taxon)}_{mainVariable.replace(' ', '_')}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_Clima_{time_freq.replace(' ', '')}{folder_sufix}"
             file_result_name = f"{'_'.join(taxon)}_{mainVariable.replace(' ', '_')}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_Clima_{time_freq.replace(' ', '')}{file_sufix}"
-            plt_title = (taxon_chart_title + " " + taxon_level + " count by " +  mainVariable.replace("_", " ")  + " (" + subVariable + ")" + " with Climatic Conditions")
+            plt_title = (taxon_chart_title + " " + taxon_level + " count by " +  mainVariable_string  + " (" + subVariable_string + ")" + " with Climatic Conditions")
     else:
         if extra_filter != None:
             folder_result_name = f"{'_'.join(taxon)}_{mainVariable.replace(' ', '_')}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{extra_subfilter.replace(' ', '_')}_{time_freq.replace(' ', '')}{folder_sufix}" 
             file_result_name = f"{'_'.join(taxon)}_{mainVariable.replace(' ', '_')}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{extra_subfilter.replace(' ', '_')}_{time_freq.replace(' ', '')}{file_sufix}"
-            plt_title = (taxon_chart_title + " " + taxon_level + " count by " +  mainVariable.replace("_", " ")  + " (" + subVariable + ")" + " and by " +  extra_filter + " (" + extra_subfilter + ")") 
+            plt_title = (taxon_chart_title + " " + taxon_level + " count by " +  mainVariable_string  + " (" + subVariable_string + ")" + " and by " +  extra_filter + " (" + extra_subfilter + ")") 
         else:        
             # Define the folder name where the .csv tables are saved (without "_Clim")
             folder_result_name = f"{'_'.join(taxon)}_{mainVariable.replace(' ', '_')}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{time_freq.replace(' ', '')}{folder_sufix}"
             file_result_name = f"{'_'.join(taxon)}_{mainVariable.replace(' ', '_')}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{time_freq.replace(' ', '')}{file_sufix}"
-            plt_title = (taxon_chart_title + " " + taxon_level + " count by " +  mainVariable.replace("_", " ")  + " (" + subVariable + ")")
+            plt_title = (taxon_chart_title + " " + taxon_level + " count by " +  mainVariable_string  + " (" + subVariable_string + ")")
    
-    return folder_result_name, file_result_name, plt_title, taxon, folder_sufix, file_sufix, time_sufix
+    return folder_result_name, file_result_name, plt_title, taxon, folder_sufix, file_sufix, time_sufix, time_freq_sufix
