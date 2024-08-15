@@ -23,9 +23,8 @@ extra_subfilter = "Site1" # Same settings as in "subvariable". If extra_filter =
 
 time_freq = "3 H" # The values ​​should be multiples or divisors of 24 hours or 60 min and have time units. Example: "12 H" or "15 min"
 time_division = "weeks" # Select the time division mode. "timespan": to activate time_start and time_end; "2 parts": to activate part_nr; "weeks": to activate week_nr. None to cover the entire time of the data.
-time_start, time_end = ["2023-08-23",  "2023-09-12"] # When time_division = "timespan" - Format: "YYYY-MM-DD"
-part_nr = 2 # When: time_division = "2 parts" - 1 or 2, 11 days each part
-week_nr = 1 # When time_division = "weeks" - 1, 2 or 3
+timespan_start, timespan_end = ["2023-08-23",  "2023-09-06"] # When time_division = "timespan" - Format: "YYYY-MM-DD"
+division_nr= 1 # When: time_division = "2 parts" - 1 or 2, 11 days each part. When time_division = "weeks" - 1, 2 or 3
 hour_start, hour_end = [7, 18] # Daily start and end hours
 
 
@@ -37,8 +36,8 @@ plot_title = True # Plot automatic generated plot title
 
 # # Insect count Y-axis scaling options
 log_scale = False # Activate Y-axis logarithmic scale
-fix_count_ylim = False # True activates min and max Y-axis values
-min_count_ylim, max_count_ylim = [0, 300]
+fix_count_ylim = True # True activates min and max Y-axis values
+min_count_ylim, max_count_ylim = [0, 80]
 num_ticks = 7 # Num of Y-axis ticks if 
 
 # Climatic variables

@@ -2,28 +2,28 @@
 import pandas as pd
 from datetime import datetime
 
-def generate_time_variables(time_division, time_freq, hour_start, hour_end, time_start, time_end, part_nr, week_nr):
+def generate_time_variables(time_division, time_freq, hour_start, hour_end, timespan_start, timespan_end, division_nr):
    
     if time_division == False:
-        time_start = "2023-08-23"
-        time_end = "2023-09-13"
+        timespan_start = "2023-08-23"
+        timespan_end = "2023-09-13"
     elif time_division== "2 parts":
-        if part_nr == 1:
-            time_start = "2023-08-23"
-            time_end = "2023-09-02"
-        elif part_nr == 2:
-            time_start = "2023-09-03"
-            time_end = "2023-09-13"
+        if division_nr == 1:
+            timespan_start = "2023-08-23"
+            timespan_end = "2023-09-02"
+        elif division_nr == 2:
+            timespan_start = "2023-09-03"
+            timespan_end = "2023-09-13"
     elif time_division== "weeks":
-        if week_nr == 1:
-            time_start = "2023-08-23"
-            time_end = "2023-08-29"
-        elif week_nr == 2:
-            time_start = "2023-08-30"
-            time_end = "2023-09-05"
-        elif week_nr == 3:
-            time_start = "2023-09-06"
-            time_end = "2023-09-12"
+        if division_nr == 1:
+            timespan_start = "2023-08-23"
+            timespan_end = "2023-08-29"
+        elif division_nr == 2:
+            timespan_start = "2023-08-30"
+            timespan_end = "2023-09-05"
+        elif division_nr == 3:
+            timespan_start = "2023-09-06"
+            timespan_end = "2023-09-12"
 
     
     freq, unit = time_freq.split()
@@ -34,14 +34,14 @@ def generate_time_variables(time_division, time_freq, hour_start, hour_end, time
         hours = int(freq) / 60
         
     minute_start = hour_start * 60
-    start_datetime = pd.to_datetime(time_start) + pd.to_timedelta(hour_start, unit='h') # Add hour_start to time_start
-    end_datetime = pd.to_datetime(time_end) + pd.to_timedelta(hour_end, unit='h') # Add hour_end to time_end
-    timedelta = datetime.strptime(time_end, "%Y-%m-%d") - datetime.strptime(time_start, "%Y-%m-%d")
+    start_datetime = pd.to_datetime(timespan_start) + pd.to_timedelta(hour_start, unit='h') # Add hour_start to timespan_start
+    end_datetime = pd.to_datetime(timespan_end) + pd.to_timedelta(hour_end, unit='h') # Add hour_end to timespan_end
+    timedelta = datetime.strptime(timespan_end, "%Y-%m-%d") - datetime.strptime(timespan_start, "%Y-%m-%d")
     timedelta = timedelta.days + 1
     return hours, minute_start, start_datetime, end_datetime, timedelta
 
 
-def handle_strings(clima, taxon, device_type, time_freq, folder_sufix, file_sufix, taxon_level, extra_filter, extra_subfilter, All, emend_id, time_division, timedelta, part_nr, week_nr, mainVariable=None, subVariable=None, mainVariable_options=None, mainVariable_description=None):
+def handle_strings(clima, taxon, device_type, time_freq, folder_sufix, file_sufix, taxon_level, extra_filter, extra_subfilter, All, emend_id, time_division, timedelta, division_nr, device_type_options, mainVariable=None, subVariable=None, mainVariable_options=None, mainVariable_description=None):
 
     mainVariable = mainVariable if mainVariable else ""
     subVariable = subVariable if subVariable else ""
@@ -49,8 +49,16 @@ def handle_strings(clima, taxon, device_type, time_freq, folder_sufix, file_sufi
     mainVariable_description = mainVariable_description if mainVariable_description else ""
 
     if mainVariable != "":
-        mainVariable_string = mainVariable_description[mainVariable]
-        subVariable_string = mainVariable_options[mainVariable][subVariable]
+        if mainVariable == "DevicexAmbient":
+            if subVariable != All:
+                mainVariable_string = mainVariable_description[mainVariable]
+                subVariable_string = " (" + mainVariable_options[mainVariable][subVariable] + ") "
+            else:
+                mainVariable_string =  mainVariable_description[mainVariable]
+                subVariable_string = " (" + device_type_options[device_type] + " in Maize Field and Meadow" + ") " 
+        else:
+            mainVariable_string = mainVariable_description[mainVariable]
+            subVariable_string = " (" + mainVariable_options[mainVariable][subVariable] + ") "
     else:
         mainVariable_string = ""
         subVariable_string = ""  
@@ -67,9 +75,18 @@ def handle_strings(clima, taxon, device_type, time_freq, folder_sufix, file_sufi
         if time_division == "timespan":
             time_sufix = "_" + str(timedelta) + "_days"
         if time_division== "2 parts":
-            time_sufix = "_part_" + str(part_nr)
+            time_sufix = "_part_" + str(division_nr)
         elif time_division== "weeks":
-            time_sufix = "_week_" + str(week_nr)    
+            time_sufix = "_week_" + str(division_nr)    
+
+            
+    if time_division != None:
+        if time_division == "timespan":
+            time_chart_title = ""
+        if time_division== "2 parts":
+            time_chart_title = " - Part " + str(division_nr)
+        elif time_division== "weeks":
+            time_chart_title = " - Week Nr. " + str(division_nr)    
 
 
     if file_sufix != None:
@@ -103,20 +120,20 @@ def handle_strings(clima, taxon, device_type, time_freq, folder_sufix, file_sufi
         if extra_filter != None:
             folder_result_name = f"{'_'.join(taxon)}_{mainVariable.replace(' ', '_')}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{extra_subfilter.replace(' ', '_')}_Clima_{time_freq.replace(' ', '')}{folder_sufix}" 
             file_result_name = f"{'_'.join(taxon)}_{mainVariable.replace(' ', '_')}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{extra_subfilter.replace(' ', '_')}_Clima_{time_freq.replace(' ', '')}{file_sufix}"
-            plt_title = (taxon_chart_title + " " + taxon_level + " count by " + mainVariable_string + " (" + subVariable_string + ")" + " and by " +  extra_filter + " (" + extra_subfilter + ")" + " with Climatic Conditions")
+            plt_title = (taxon_chart_title + " " + taxon_level + " count by " + mainVariable_string + subVariable_string + "and by " +  extra_filter + " (" + extra_subfilter + ")" + " with Climatic Conditions" + time_chart_title)
         else:
             folder_result_name = f"{'_'.join(taxon)}_{mainVariable.replace(' ', '_')}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_Clima_{time_freq.replace(' ', '')}{folder_sufix}"
             file_result_name = f"{'_'.join(taxon)}_{mainVariable.replace(' ', '_')}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_Clima_{time_freq.replace(' ', '')}{file_sufix}"
-            plt_title = (taxon_chart_title + " " + taxon_level + " count by " +  mainVariable_string  + " (" + subVariable_string + ")" + " with Climatic Conditions")
+            plt_title = (taxon_chart_title + " " + taxon_level + " count by " +  mainVariable_string + subVariable_string + "with Climatic Conditions"  + time_chart_title)
     else:
         if extra_filter != None:
             folder_result_name = f"{'_'.join(taxon)}_{mainVariable.replace(' ', '_')}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{extra_subfilter.replace(' ', '_')}_{time_freq.replace(' ', '')}{folder_sufix}" 
             file_result_name = f"{'_'.join(taxon)}_{mainVariable.replace(' ', '_')}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{extra_subfilter.replace(' ', '_')}_{time_freq.replace(' ', '')}{file_sufix}"
-            plt_title = (taxon_chart_title + " " + taxon_level + " count by " +  mainVariable_string  + " (" + subVariable_string + ")" + " and by " +  extra_filter + " (" + extra_subfilter + ")") 
+            plt_title = (taxon_chart_title + " " + taxon_level + " count by " +  mainVariable_string + subVariable_string + "and by " +  extra_filter + " (" + extra_subfilter + ")"  + time_chart_title) 
         else:        
             # Define the folder name where the .csv tables are saved (without "_Clim")
             folder_result_name = f"{'_'.join(taxon)}_{mainVariable.replace(' ', '_')}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{time_freq.replace(' ', '')}{folder_sufix}"
             file_result_name = f"{'_'.join(taxon)}_{mainVariable.replace(' ', '_')}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{time_freq.replace(' ', '')}{file_sufix}"
-            plt_title = (taxon_chart_title + " " + taxon_level + " count by " +  mainVariable_string  + " (" + subVariable_string + ")")
+            plt_title = (taxon_chart_title + " " + taxon_level + " count by " +  mainVariable_string  + subVariable_string  + time_chart_title)
    
     return folder_result_name, file_result_name, plt_title, taxon, folder_sufix, file_sufix, time_sufix, time_freq_sufix

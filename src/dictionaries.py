@@ -10,15 +10,15 @@
 
 time_division_options = {
     "timespan": "select time start and end period",
-    "2 parts": "divide into two equal parts",
+    "2 parts": "divide into 2 equal parts",
     "weeks": "divide into 3 weeks"
 }
 
 mainVariable_options = {
     "Ambient": {
         "All": "Maize Field and Meadow",
-        "Maize": "Maize Field conditions",
-        "Meadow": "Meadow conditions"
+        "Maize": "Maize Field",
+        "Meadow": "Meadow"
     },
     "Device_type": {
         "All": "FAIR-Device and Insect Detect",
@@ -44,9 +44,9 @@ mainVariable_options = {
         "Site4": "Site 4"
     },
     "DevicexAmbient": {
-        "All": "Device Type in Maize Field and Meadow",
-        "FAIRDxMaize": "FAIR-D in Maize Field",
-        "FAIRDxMeadow": "FAIR-D in Meadow",
+        "All": "Device Type in Ambient",
+        "FAIRDxMaize": "FAIR-Device in Maize Field",
+        "FAIRDxMeadow": "FAIR-Device in Meadow",
         "IDxMaize": "Insect Detect in Maize Field",
         "IDxMeadow": "Insect Detect in Meadow"
     }
@@ -59,14 +59,14 @@ mainVariable_description = {
     "Device_type": "Device Type",
     "Device": "Device",
     "Site": "Site",
-    "DevicexAmbient": "Device in Ambient"
+    "DevicexAmbient": "Device and by Ambient"
 }
 
 
 device_type_options = {
-    "All": "Show all devices",
-    "FAIRD": "FAIR-D devices only",
-    "ID": "ID devices only"
+    "All": "FAIR-Device and Insect Detect",
+    "FAIRD": "FAIR-D",
+    "ID": "Insect Detect"
 }
 
 taxon_level_options = {
@@ -85,8 +85,8 @@ extra_filter_options = {
         "Meadow": "Meadow conditions"
     },
     "Device_type": {
-        "FAIRD": "FAIR-D devices",
-        "ID": "ID devices"
+        "FAIRD": "FAIR-Device",
+        "ID": "Insect Detect"
     },
     "Device": {
         "FAIRD1": "FAIR-Device 1",

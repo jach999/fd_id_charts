@@ -53,9 +53,9 @@ if __name__ == "__main__":
 
 
 # Generate time variables
-hours, minute_start, start_datetime, end_datetime, timedelta = generate_time_variables(time_division, time_freq, hour_start, hour_end, time_start, time_end, part_nr, week_nr)
+hours, minute_start, start_datetime, end_datetime, timedelta = generate_time_variables(time_division, time_freq, hour_start, hour_end, timespan_start, timespan_end, division_nr)
 # Generate strings
-folder_result_name, file_result_name, plt_title, taxon, folder_sufix, file_sufix, time_sufix, time_freq_sufix = handle_strings(clima, taxon, device_type, time_freq, folder_sufix, file_sufix, taxon_level, extra_filter, extra_subfilter, All, emend_id, time_division, timedelta, part_nr, week_nr, mainVariable, subVariable, mainVariable_options, mainVariable_description)
+folder_result_name, file_result_name, plt_title, taxon, folder_sufix, file_sufix, time_sufix, time_freq_sufix = handle_strings(clima, taxon, device_type, time_freq, folder_sufix, file_sufix, taxon_level, extra_filter, extra_subfilter, All, emend_id, time_division, timedelta, division_nr, device_type_options, mainVariable, subVariable, mainVariable_options, mainVariable_description)
 
 print()
 print("##### Time settings #####")
@@ -156,9 +156,31 @@ if create_chart == True:
     if hours >= 24:
         ax1 = ax1_merged_df.plot.bar(figsize=(figwidth, 8), legend=False, color=colors, alpha=0.7, fontsize=fontsize)
         ax1.set_xticklabels(ax1_merged_df.index.strftime("%Y-%m-%d"), rotation=45, ha="right")
+        ax1.set_xlabel("Date")
     else:
         ax1 = ax1_merged_df.plot.bar(figsize=(figwidth, 8), legend=False, color=colors, alpha=0.7, fontsize=fontsize, width=0.8)
-        ax1.set_xticklabels(ax1_merged_df.index.strftime("%Y-%m-%d %H:%M"), rotation=45, ha="right")
+        ax1.set_xticklabels(ax1_merged_df.index.strftime("%H:%M"), rotation=45)
+        x_axis = ax1.xaxis
+        x_axis.label.set_visible(False) # Remove x-axis labels
+        
+        # Create secondary x-axis below the primary x-axis
+        sec = ax1.secondary_xaxis('bottom')
+
+        # Calculate the positions for the secondary ticks
+        unique_days = ax1_merged_df.index.normalize().unique()
+        day_positions = [(ax1_merged_df.index.get_indexer([day], method='nearest')[0] + ax1_merged_df.index.get_indexer([day + pd.Timedelta(days=1) - pd.Timedelta(seconds=1)], method='nearest')[0]) / 2 for day in unique_days]
+        
+        # Set the secondary ticks and labels
+        sec.set_xticks(day_positions)
+        sec.set_xticklabels(unique_days.strftime("%d %b"), ha="center")
+
+        # Adjust the position of the secondary x-axis
+        sec.spines['bottom'].set_position(('outward', 35))
+        sec.set_xlabel("Date", labelpad=8)
+
+        # Remove the tick markers and horizontal lines from the secondary x-axis
+        sec.tick_params(which='both', length=0)  # Set tick length to 0 to remove markers
+        sec.spines['bottom'].set_visible(False)  # Hide the horizontal line (spine)
 
 
     # Y axis scaling options
@@ -196,7 +218,7 @@ if create_chart == True:
 
 
                 
-    ax1.set_xlabel("Date")
+    
     ax1.set_ylabel("Insect Count", color="black") 
     ax1.tick_params(axis="y", labelcolor="black")
     ax1.set_facecolor("None") # Background of the axis transparent
@@ -320,13 +342,13 @@ if create_chart == True:
                     combined_labels.append("Precipitation")
             
         # Create the main axis in the updated legend
-        ax1.legend(combined_handles, combined_labels, loc="upper left", bbox_to_anchor=((-0.15, 1)))
+        ax1.legend(combined_handles, combined_labels, loc="upper left", bbox_to_anchor=((-0.18, 1)))
         
     else:
-        ax1.legend(loc="upper left", bbox_to_anchor=((-0.15, 1)))
+        ax1.legend(loc="upper left", bbox_to_anchor=((-0.18, 1)))
 
     if plot_title == True:
-        plt.title(plt_title)
+        plt.title(plt_title, fontsize=16)
 
     #plt.tight_layout()
     if save_chart == True:
