@@ -74,20 +74,22 @@ def handle_strings(clima, taxon, device_type, time_freq, folder_sufix, file_sufi
     if time_division != None:
         if time_division == "timespan":
             time_sufix = "_" + str(timedelta) + "_days"
-        if time_division== "2 parts":
+        if time_division == "2 parts":
             time_sufix = "_part_" + str(division_nr)
-        elif time_division== "weeks":
+        elif time_division == "weeks":
             time_sufix = "_week_" + str(division_nr)    
 
             
     if time_division != None:
         if time_division == "timespan":
             time_chart_title = ""
-        if time_division== "2 parts":
-            time_chart_title = " - Part " + str(division_nr)
-        elif time_division== "weeks":
-            time_chart_title = " - Week Nr. " + str(division_nr)    
-
+            title_pad = 35
+        if time_division == "2 parts":
+            time_chart_title = "\n - Part " + str(division_nr) + " -"
+            title_pad = 45
+        elif time_division == "weeks":
+            time_chart_title = "\n - Week " + str(division_nr) + " -"   
+            title_pad = 45
 
     if file_sufix != None:
         file_sufix = ("_" + file_sufix)
@@ -136,4 +138,4 @@ def handle_strings(clima, taxon, device_type, time_freq, folder_sufix, file_sufi
             file_result_name = f"{'_'.join(taxon)}_{mainVariable.replace(' ', '_')}{'_' + subVariable if subVariable != All else ''}{'_' + device_type if device_type != All else ''}_{time_freq.replace(' ', '')}{file_sufix}"
             plt_title = (taxon_chart_title + " " + taxon_level + " count by " +  mainVariable_string  + subVariable_string  + time_chart_title)
    
-    return folder_result_name, file_result_name, plt_title, taxon, folder_sufix, file_sufix, time_sufix, time_freq_sufix
+    return folder_result_name, file_result_name, plt_title, taxon, folder_sufix, file_sufix, time_sufix, time_freq_sufix, title_pad

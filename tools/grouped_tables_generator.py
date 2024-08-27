@@ -12,7 +12,7 @@ pd.options.mode.chained_assignment = None  # default='warn'
 from tools.grouped_tables_config import * # Configuration variables
 from src.dictionaries_control import *
 from src.variables_handling import generate_time_variables, handle_strings
-from src.insect_data_processing_anova import insect_data_process_anova
+from src.insect_data_processing_tables import insect_data_process_tables
 from src.clim_data_processing import clim_data_process
 
 # Load data
@@ -46,7 +46,7 @@ if __name__ == "__main__":
 # Generate time variables
 hours, minute_start, start_datetime, end_datetime, timedelta = generate_time_variables(time_division, time_freq, hour_start, hour_end, timespan_start, timespan_end, division_nr)
 # Generate strings
-folder_result_name, file_result_name, plt_title, taxon, folder_sufix, file_sufix, time_sufix, time_freq_sufix = handle_strings(clima, taxon, device_type, time_freq, folder_sufix, file_sufix, taxon_level, extra_filter, extra_subfilter, All, emend_id, time_division, timedelta, division_nr)
+folder_result_name, file_result_name, _, taxon, folder_sufix, file_sufix, time_sufix, time_freq_sufix, _ = handle_strings(clima, taxon, device_type, time_freq, folder_sufix, file_sufix, taxon_level, extra_filter, extra_subfilter, All, emend_id, time_division, timedelta, division_nr, device_type_options)
 
 grouped_table_name = str('fd_id_' + time_freq_sufix + file_sufix + '.csv')
 
@@ -66,7 +66,7 @@ if not os.path.exists("results/grouped_tables/" + folder_result_name):
     os.makedirs("results/grouped_tables/" + folder_result_name, 0o777)
 
 # Process insect data and clima data functions
-dfg_insect = insect_data_process_anova(parent_dir, time_freq, start_datetime, end_datetime, hour_start, hour_end, taxon, taxon_level, device_type, extra_filter, extra_subfilter, All, emend_id)
+dfg_insect = insect_data_process_tables(parent_dir, time_freq, start_datetime, end_datetime, hour_start, hour_end, taxon, taxon_level, device_type, extra_filter, extra_subfilter, All, emend_id)
 dfg_clim = clim_data_process(parent_dir, time_freq, start_datetime, end_datetime, minute_start, hours, hour_start, hour_end)
    
 # merge_filter_factor and climatic tables

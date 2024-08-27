@@ -9,7 +9,7 @@ def insect_data_process(parent_dir, start_datetime, end_datetime, minute_start, 
 
     # If False, the fake ID-3 data is deleted
     if not emend_id:
-        insect_data = insect_data[insect_data["Device"] != "ID-3"]
+        insect_data = insect_data[insect_data["Device"] != "ID3"]
 
     # Create the new column "CheckinDate" with combined date and time
     insect_data = insect_data.sort_values(by="DateTime")

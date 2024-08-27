@@ -1,6 +1,6 @@
 import pandas as pd
 
-def insect_data_process_anova(parent_dir, time_freq, start_datetime, end_datetime, hour_start, hour_end, taxon, taxon_level, device_type, extra_filter, extra_subfilter, All, emend_id):
+def insect_data_process_tables(parent_dir, time_freq, start_datetime, end_datetime, hour_start, hour_end, taxon, taxon_level, device_type, extra_filter, extra_subfilter, All, emend_id):
     # Read the source folders
     insect_data = pd.read_excel(parent_dir + "/source_tables/id_faird.xlsx", sheet_name="Results", header=0, decimal=",")
 
@@ -9,7 +9,7 @@ def insect_data_process_anova(parent_dir, time_freq, start_datetime, end_datetim
 
     # If False, the fake ID-3 data is deleted
     if emend_id == False:
-        insect_data = insect_data[insect_data["Device"] != "ID-3"]
+        insect_data = insect_data[insect_data["Device"] != "ID3"]
 
     # Create the new column "CheckinDate" with combined date and time
     insect_data = insect_data.sort_values(by="DateTime")
