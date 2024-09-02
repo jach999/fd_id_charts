@@ -46,14 +46,14 @@ if __name__ == "__main__":
 # Generate time variables
 hours, minute_start, start_datetime, end_datetime, timedelta = generate_time_variables(time_division, time_freq, hour_start, hour_end, timespan_start, timespan_end, division_nr)
 # Generate strings
-folder_result_name, file_result_name, _, taxon, folder_sufix, file_sufix, time_sufix, time_freq_sufix, _ = handle_strings(clima, taxon, device_type, time_freq, folder_sufix, file_sufix, taxon_level, extra_filter, extra_subfilter, All, emend_id, time_division, timedelta, division_nr, device_type_options)
+folder_result_name, file_result_name, _, taxon, folder_suffix_string, file_suffix, time_suffix, time_freq_suffix, _ = handle_strings(clima, taxon, device_type, time_freq, folder_suffix, file_suffix, taxon_level, extra_filter, extra_subfilter, All, emend_id, time_division, timedelta, division_nr, device_type_options)
 
-grouped_table_name = str('fd_id_' + time_freq_sufix + file_sufix + '.csv')
+grouped_table_name = str('fd_id_' + time_freq_suffix + file_suffix + '.csv')
 
 print()
 print("##### Time settings #####")
 print("-------------------------")
-print(time_sufix.replace("_", " ").strip() + ":")
+print(time_suffix.replace("_", " ").strip() + ":")
 print("Time start: "+ str(start_datetime))
 print("Time end: "+ str(end_datetime))
 print("Timedelta: " + str(timedelta))
@@ -96,7 +96,7 @@ if week_column:
 merged_df.to_csv(HOME + "\\results\\grouped_tables\\" + folder_result_name + "\\" + grouped_table_name, index=True)  # Set index=True to include row labels (index) in the CSV
 
 if stat_save == True:
-    merged_df.to_csv(grandparent_dir + "/stat/source_tables/" + grouped_table_name, index=True) 
+    merged_df.to_csv(grandparent_dir + "/fd_id_stats/source_tables/" + grouped_table_name, index=True) 
 
 if interim_result_tables:
     dfg_insect.to_csv("results/grouped_tables/" + folder_result_name + "/" + file_result_name + '_dfg_insect.csv', index=True)  # Set index=True to include row labels (index) in the CSV

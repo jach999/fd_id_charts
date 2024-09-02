@@ -55,12 +55,12 @@ if __name__ == "__main__":
 # Generate time variables
 hours, minute_start, start_datetime, end_datetime, timedelta = generate_time_variables(time_division, time_freq, hour_start, hour_end, timespan_start, timespan_end, division_nr)
 # Generate strings
-folder_result_name, file_result_name, plt_title, taxon, folder_sufix, file_sufix, time_sufix, time_freq_sufix, title_pad = handle_strings(clima, taxon, device_type, time_freq, folder_sufix, file_sufix, taxon_level, extra_filter, extra_subfilter, All, emend_id, time_division, timedelta, division_nr, device_type_options, mainVariable, subVariable, mainVariable_options, mainVariable_description)
+folder_result_name, file_result_name, plt_title, taxon, folder_suffix_string, file_suffix_string, time_suffix, time_freq_suffix, title_pad = handle_strings(clima, taxon, device_type, time_freq, folder_suffix, file_suffix, taxon_level, extra_filter, extra_subfilter, All, emend_id, time_division, timedelta, division_nr, device_type_options, mainVariable, subVariable, mainVariable_options, mainVariable_description)
 
 print()
 print("##### Time settings #####")
 print("-------------------------")
-print(time_sufix.replace("_", " ").strip() + ":")
+print(time_suffix.replace("_", " ").strip() + ":")
 print("Time start: "+ str(start_datetime))
 print("Time end: "+ str(end_datetime))
 print("Timedelta: " + str(timedelta))

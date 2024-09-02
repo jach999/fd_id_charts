@@ -68,8 +68,8 @@ result_tables = True # Saves the interim result tables in the result/ folder
 create_chart = True # Activates the save_chart and display_chart options
 save_chart = True # Save chart .png file in the result/ folder
 display_chart = True # Display the generated chart in a new window
-folder_sufix = None # Add an extra folder sufix to the results data folder and chart name. None to deactivate
-file_sufix = None # Add an extra file sufix to the results data folder and chart name. None to deactivate
+folder_suffix = None # Add an extra folder suffix to the results data folder and chart name. None to deactivate
+file_suffix = None # Add an extra file suffix to the results data folder and chart name. None to deactivate
 
 #---------------------#
 
