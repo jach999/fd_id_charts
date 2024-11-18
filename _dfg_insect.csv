@@ -1,4 +1,0 @@
-DateTime,ID,Device_type,Device,Site,Ambient,Device x Ambient,Checkin,Checkout,Duration,Pre-classification,Class,Order,Suborder,Superfamily,Family,Subfamily,Genus,Epithet
-2023-08-23 06:00:00,1233.0,ID,ID-2,Site 2,Maize Field,ID - Maize Field,"2023-08-23 07:01:59,395","2023-08-23 07:02:23,813","00:00:24,42",fly,Insecta,Diptera,Brachycera,#N/C,#N/C,#N/C,#N/C,#N/C
-2023-08-23 09:00:00,1196.2,ID,ID-2,Site 2,Maize Field,ID - Maize Field,"2023-08-23 07:02:49,286","2023-08-23 07:08:04,566","00:05:15,28",fly,Insecta,Diptera,Brachycera,#N/C,#N/C,#N/C,#N/C,#N/C
-2023-08-23 12:00:00,3.0,ID,ID-3,Site 3,Meadow,ID - Meadow,"2023-08-23 07:31:21,257","2023-08-23 07:33:11,103","00:01:49,85",fly,Insecta,Diptera,Brachycera,#N/C,#N/C,#N/C,#N/C,#N/C

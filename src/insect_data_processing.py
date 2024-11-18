@@ -38,7 +38,8 @@ def insect_data_process(parent_dir, start_datetime, end_datetime, minute_start, 
         insect_data_filtered = insect_data_filtered[insect_data_filtered["Device_type"] == device_type]
 
     # Group by date (in a given time_freq) and by mainVariable
-    dfg_filter_factor = insect_data_filtered.groupby([pd.Grouper(key="DateTime", freq= time_freq, offset=f"{minute_start}T"), mainVariable])[taxon_level].count().reset_index()
+    dfg_filter_factor = insect_data_filtered.groupby([pd.Grouper(key="DateTime", freq= time_freq, offset=f"{minute_start}min"), mainVariable])[taxon_level].count().reset_index()
+
 
     # Make a pivot table with a column for each_filter_factor and insect count per day
     dfp_filter_factor = dfg_filter_factor.pivot_table(index="DateTime", columns=mainVariable, values=taxon_level, aggfunc='sum')

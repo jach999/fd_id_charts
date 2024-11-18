@@ -22,7 +22,7 @@ def clim_data_process(parent_dir, time_freq, start_datetime, end_datetime, minut
     clim_data_timespan.drop('Hour', axis=1, inplace=True)
   
     # Group by date (in a given time_freq) and by climatic variables
-    dfg_clim = clim_data_timespan.groupby(pd.Grouper(key="DateTime", freq= time_freq, offset=f"{minute_start}T")).agg({
+    dfg_clim = clim_data_timespan.groupby(pd.Grouper(key="DateTime", freq= time_freq, offset=f"{minute_start}min")).agg({
         "AIRTEMP": "mean",
         "WINDSPEED": "mean",
         "PRECIPITATION": "sum",

@@ -28,7 +28,7 @@ def generate_time_variables(time_division, time_freq, hour_start, hour_end, time
     
     freq, unit = time_freq.split()
 
-    if unit == 'H':
+    if unit == 'h':
         hours = int(freq)
     elif unit == 'min':
         hours = int(freq) / 60
