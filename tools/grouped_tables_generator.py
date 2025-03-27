@@ -61,9 +61,11 @@ print()
 print("Data saved as: " + "\033[94m" + HOME + "\\results\\grouped_tables\\" + folder_result_name + "\\" + grouped_table_name + "\033[0m")
 print()
 
+
 # Create the folder if it doesn't exist
-if not os.path.exists("results/grouped_tables/" + folder_result_name):
-    os.makedirs("results/grouped_tables/" + folder_result_name, 0o777)
+output_dir = os.path.join(parent_dir, "results", "grouped_tables", folder_result_name)
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir, 0o777)
 
 # Process insect data and clima data functions
 dfg_insect = insect_data_process_tables(parent_dir, time_freq, start_datetime, end_datetime, hour_start, hour_end, taxon, taxon_level, device_type, extra_filter, extra_subfilter, All, emend_id)
