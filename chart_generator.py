@@ -13,6 +13,7 @@ from src.clim_data_processing import clim_data_process
 from src.labels import ecv_value_label, ecv_value_label_color, custom_colors
 #from src.var_checker import variables_checker
 from matplotlib.ticker import ScalarFormatter
+import helpers
 
 # Load data
 HOME = os.path.dirname(__file__)
@@ -138,15 +139,7 @@ if create_chart == True:
     data_points = len(ax1_merged_df)
 
     # Set the bars width and the font based on the number of data points
-    if data_points < 90:
-        figwidth = 18
-        fontsize = 12
-    elif data_points > 130:
-        figwidth = 26
-        fontsize = 9
-    else:
-        figwidth = data_points/5
-        fontsize = (1080/data_points)
+    figwidth,fontsize = SetBarsWithAndSize(data_points)
 
     #print("Data points:" + str(data_points))
     #print("Figure widht: " + str(figwidth))
