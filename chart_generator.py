@@ -55,7 +55,7 @@ if __name__ == "__main__":
 # Generate time variables
 hours, minute_start, start_datetime, end_datetime, timedelta = generate_time_variables(time_division, time_freq, hour_start, hour_end, timespan_start, timespan_end, division_nr)
 # Generate strings
-folder_result_name, file_result_name, plt_title, taxon, folder_suffix_string, file_suffix_string, time_suffix, time_freq_suffix, title_pad = handle_strings(clima, taxon, device_type, time_freq, folder_suffix, file_suffix, taxon_level, extra_filter, extra_subfilter, All, emend_id, time_division, timedelta, division_nr, device_type_options, mainVariable, subVariable, mainVariable_options, mainVariable_description)
+folder_result_name, file_result_name, plt_title, taxon, folder_suffix_string, file_suffix_string, time_suffix, time_freq_suffix, title_pad = handle_strings(clima, taxon, device_type, time_freq, folder_suffix, file_suffix, taxon_level, extra_filter, extra_filter_options, extra_subfilter, All, emend_id, time_division, timedelta, division_nr, device_type_options, mainVariable, subVariable, mainVariable_options, mainVariable_description)
 
 print()
 print("##### Time settings #####")
@@ -222,7 +222,7 @@ if create_chart == True:
 
                 
     
-    ax1.set_ylabel("Insect Count", color="black", fontsize=fontsize*1.4) 
+    ax1.set_ylabel("Abundance", color="black", fontsize=fontsize*1.4) 
     ax1.tick_params(axis="y", labelcolor="black", labelsize=fontsize)
     ax1.set_facecolor("None") # Background of the axis transparent
     ax1.set_zorder(3) # Set the plotting order explicitly

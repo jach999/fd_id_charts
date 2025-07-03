@@ -11,14 +11,17 @@
 time_division_options = {
     "timespan": "select time start and end period",
     "2 parts": "divide into 2 equal parts",
-    "weeks": "divide into 3 weeks"
+    "weeks": "divide into 3 weeks",
+    None:"Cover the entire time of the data"
 }
 
 mainVariable_options = {
     "Ambient": {
         "All": "Maize Field and Meadow",
         "Maize": "Maize Field",
-        "Meadow": "Meadow"
+        "Meadow": "Meadow",
+        "FAIRD": "FAIR-Device 1, 2, 3, and 4",
+        "ID": "Insect Detect 1, 2, and 4"
     },
     "Device_type": {
         "All": "FAIR-Device and Insect Detect",
@@ -34,21 +37,27 @@ mainVariable_options = {
         "ID1": "Insect Detect 1",
         "ID2": "Insect Detect 2",
         "ID3": "Insect Detect 3",
-        "ID4": "Insect Detect 4"
+        "ID4": "Insect Detect 4",
+        "FAIRD": "FAIR-Device 1, 2, 3, and 4",
+        "ID": "Insect Detect 1, 2, and 4"
     },
     "Site": {
         "All": "All Sites",
         "Site1": "Site 1",
         "Site2": "Site 2",
         "Site3": "Site 3",
-        "Site4": "Site 4"
+        "Site4": "Site 4",
+        "FAIRD": "FAIR-Device 1, 2, 3, and 4",
+        "ID": "Insect Detect 1, 2, and 4"
     },
     "DevicexAmbient": {
-        "All": "Device Type in Ambient",
+        "All": "FAIR-Device and Insect Detect in Maize Field and Meadow",
         "FAIRDxMaize": "FAIR-Device in Maize Field",
         "FAIRDxMeadow": "FAIR-Device in Meadow",
         "IDxMaize": "Insect Detect in Maize Field",
-        "IDxMeadow": "Insect Detect in Meadow"
+        "IDxMeadow": "Insect Detect in Meadow",
+        "FAIRD": "FAIR-Device 1, 2, 3, and 4",
+        "ID": "Insect Detect 1, 2, and 4"
     }
 
 }
@@ -65,7 +74,7 @@ mainVariable_description = {
 
 device_type_options = {
     "All": "FAIR-Device and Insect Detect",
-    "FAIRD": "FAIR-D",
+    "FAIRD": "FAIR-Device",
     "ID": "Insect Detect"
 }
 

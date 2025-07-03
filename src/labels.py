@@ -15,7 +15,7 @@ custom_colors = {
     "ID3": "darkgreen",
     "ID4": "olivedrab",
     "FAIRD": "blue",  
-    "ID": "orange",
+    "ID": "magenta",
     "FAIRDxMaize": "gold",
     "FAIRDxMeadow": "yellowgreen",
     "IDxMaize": "orange",

@@ -22,7 +22,7 @@ clima = True # Activate temperature, windspeed, precipitation and solar radiaion
 #      Time settings      #
 #-------------------------#
 
-time_freq = "1 min" # The values ​​should be multiples or divisors of 24 hours or 60 min and have time units. Example: "12 H" or "15 min"
+time_freq = "1 min" # The values ​​should be multiples or divisors of 24 hours or 60 min and have time units. Example: "12 h" or "15 min"
 time_division = "timespan" # Select the time division mode. "timespan": to activate time_start and time_end; "2 parts": to activate part_nr; "weeks": to activate week_nr. None to cover the entire time of the data.
 timespan_start, timespan_end = ["2023-08-23",  "2023-09-12"] # When time_division = "timespan" - Format: "YYYY-MM-DD"
 division_nr= 1 # When: time_division = "2 parts" - 1 or 2, 11 days each part. When time_division = "weeks" - 1, 2 or 3
@@ -42,4 +42,4 @@ stat_save = True # Save a copy of the result grouped table in the stat folder
 #---------------------#
 
 # Set to true for rectifying the data due to the ID-3 failure, creating a FAKE ID-3 by multiplying data of ID-4 *2
-emend_id = True
+emend_id = False

@@ -74,6 +74,19 @@ dfg_clim = clim_data_process(parent_dir, time_freq, start_datetime, end_datetime
 # merge_filter_factor and climatic tables
 merged_df =  pd.merge(dfg_insect, dfg_clim, on="DateTime", how="outer")
 
+# Convert all DateTime columns explicitly to datetime64[ns]
+merged_df['DateTime'] = pd.to_datetime(merged_df['DateTime'], errors='coerce')
+
+
+# Set missing values to zero
+'''for column in merged_df.columns:
+    if pd.api.types.is_datetime64_any_dtype(merged_df[column]):
+        merged_df[column] = merged_df[column].fillna(pd.Timestamp("1970-01-01"))
+    elif pd.api.types.is_numeric_dtype(merged_df[column]):
+        merged_df[column] = merged_df[column].fillna(0)
+    else:
+        merged_df[column] = merged_df[column].fillna("")'''
+        
 # Set missing values to zero
 merged_df.fillna(0, inplace=True)
 
