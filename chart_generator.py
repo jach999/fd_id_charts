@@ -13,7 +13,8 @@ from src.clim_data_processing import clim_data_process
 from src.labels import ecv_value_label, ecv_value_label_color, custom_colors
 #from src.var_checker import variables_checker
 from matplotlib.ticker import ScalarFormatter
-import helpers
+from src.helpers import *
+
 
 # Load data
 HOME = os.path.dirname(__file__)
